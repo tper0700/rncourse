@@ -26,66 +26,47 @@ const headingbg = "#083D77";
 const textcol = "#000000";
 const textcol_dark = "#ffffff";
 
-/*import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-*/
-
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? textcol_dark : textcol,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? textcol_dark : textcol,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const darker =  "#333355";
   const lighter = "#ffdcdc";
+  const headingbg = "#262424";
+  const headingfg = "#e5dada";
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? mainbg : mainbg,
   };
 
-  const backgroundHeading = {
-    backgroundColor: isDarkMode ? headingbg : headingbg,
-  };
-
+  const appStyles = StyleSheet.create({
+    Heading: {
+      height: 150,
+      backgroundColor: headingbg,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    TitleText: {
+      fontSize: 42,
+      color: headingfg,
+    },
+    SubTitle: {
+      fontSize: 14,
+      color: headingfg,
+    }
+  });
+  
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundHeading.backgroundColor}
+        backgroundColor={darker}
       />
-      <View style={backgroundHeading}>
-      <Feline />
+      <View style={appStyles.Heading}>
+      <Text style={appStyles.TitleText}>Hello world</Text>
+      <Text style={appStyles.SubTitle}>and welcome to your cat collection</Text>
       </View>
       <View
         style={backgroundStyle}>
@@ -102,35 +83,11 @@ function App(): JSX.Element {
           {key: 'User 9'},
           {key: 'User 10'},
         ]}
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+        renderItem={({item}) => <Feline cat={item.key}/>}
       />
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  }
-});
 
 export default App;
