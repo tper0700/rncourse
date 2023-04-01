@@ -1,7 +1,3 @@
-A readme file inside the zip file explaining in brief the working of your App, how many
-hours it took you to complete it, what were the most challenging parts, and please cite
-any websites or any other sources you used.
-
 # EEP 523A: Homework 1
 **Tomas Perez Rodriguez**  
 Spring 2023
@@ -61,3 +57,6 @@ Project took about 10 hours to complete. The most challenging part, about 3 hour
 
 ## References
 
+* [FlatList and other component documentation](https://reactnative.dev/docs/flatlist)
+* [How to run an app in xcode](https://help.apple.com/xcode/mac/current/#/dev5a825a1ca)
+* [A deep dive into React Native FlatList](https://blog.logrocket.com/deep-dive-react-native-flatlist/)
