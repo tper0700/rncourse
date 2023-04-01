@@ -40,12 +40,14 @@ The removeCat handler is passed down to the `Feline` component as a prop.
 
 ## Installation
 
-After creating the folder locally (unzip or clone from git), run the following commands:
+After creating the folder locally (unzip or clone from git), run the following commands in the project folder:
 
 ```
 npm install
 sudo gem install cocoapods
+cd ios
 pod install
+cd ..
 ```
 
 Next, using xcode or android studio, configure the device to test with. After that, run the application with:
