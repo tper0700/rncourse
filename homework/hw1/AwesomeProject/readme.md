@@ -38,6 +38,22 @@ The removeCat handler is passed down to the `Feline` component as a prop.
         >
 ```
 
+## Installation
+
+After creating the folder locally (unzip or clone from git), run the following commands:
+
+```
+npm install
+sudo gem install cocoapods
+pod install
+```
+
+Next, using xcode or android studio, configure the device to test with. After that, run the application with:
+
+```
+npx react-native run-ios
+```
+
 ## Details
 Project took about 10 hours to complete. The most challenging part, about 3 hours, was trying to figure out why the list of elements wasn't refreshing on update. It turned out that reusing the same list every time would mean the state wouldn't recognize a change.
 
