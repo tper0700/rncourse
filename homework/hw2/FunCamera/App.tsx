@@ -108,7 +108,7 @@ function App(): JSX.Element {
         backgroundColor={headingbg}
       />
       <View style={appStyles.Heading}>
-        <Text style={appStyles.TitleText}>Awesome Camera</Text>
+        <Text style={appStyles.TitleText}>Fun Camera</Text>
         <Text style={appStyles.SubTitle}>and welcome to your cat collection!</Text>
         <Text style={appStyles.SubTitle}>{countState}</Text>
       </View>
