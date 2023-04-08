@@ -20,7 +20,7 @@ import {
   FlatList,
 } from 'react-native';
 
-import { Face } from './Face'
+import { Face } from './components/Face'
 
 const mainbg = "#ebebd3";
 
@@ -109,7 +109,7 @@ function App(): JSX.Element {
       />
       <View style={appStyles.Heading}>
         <Text style={appStyles.TitleText}>Fun Camera</Text>
-        <Text style={appStyles.SubTitle}>and welcome to your cat collection!</Text>
+        <Text style={appStyles.SubTitle}>take a few face snaps!</Text>
         <Text style={appStyles.SubTitle}>{countState}</Text>
       </View>
       <View style={appStyles.ContainerView}>
