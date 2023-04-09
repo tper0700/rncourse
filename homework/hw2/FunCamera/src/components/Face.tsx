@@ -6,6 +6,13 @@ import * as FaceDetector from 'expo-face-detector';
 
 import {images} from "../../assets";
 
+export interface Rect {
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+}
+
 const headingbg = "#262424";
 const headingfg = "#e5dada";
 
@@ -72,7 +79,10 @@ const styles = StyleSheet.create({
 });
 
 // A single user picture pane.
-const Face = function(props: { name: string }) {
+const Face = function(props: {
+  setImage: Function,
+  setRect: Function,
+}) {
   const [imageState, setImageState] = useState<Asset | null>(null);
   const [cameraPrompt, setCameraPrompt] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -86,14 +96,6 @@ const Face = function(props: { name: string }) {
     if (assets && assets.length > 0 && assets[0].uri) {
       FaceDetector.detectFacesAsync(assets[0].uri)
       .then((res : FaceDetector.DetectionResult) => {
-        console.log("Detector Returned!");
-        for (let face of res.faces) {
-          let x = face.bounds.origin.x;
-          let y = face.bounds.origin.y;
-          let h = face.bounds.size.height;
-          let w = face.bounds.size.width;
-          console.log("  (" + x + ", " + y + ") : (" + w + ", " + w + ")");
-        }
         if (res.faces.length == 0) {
           let msg = "There are no faces on this picture!";
           console.log("error: " + msg);
@@ -103,8 +105,19 @@ const Face = function(props: { name: string }) {
           console.log("error: " + msg);
           setErrorMessage(msg);
         } else {
+          console.log("Detector returned a face")
+          let face = res.faces[0];
+          let r : Rect = {
+            x: face.bounds.origin.x,
+            y: face.bounds.origin.y,
+            h: face.bounds.size.height,
+            w: face.bounds.size.width,
+          };
+          console.log("rect : " + JSON.stringify(r));
           if (assets) {
             setImageState(assets[0] as object);
+            props.setImage(assets[0] as object);
+            props.setRect(r);
           }
           setCameraPrompt(false);
         }

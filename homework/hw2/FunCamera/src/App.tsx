@@ -6,8 +6,8 @@
  */
 
 import React, { useState, useRef } from 'react';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import type {PropsWithChildren} from 'react';
+import {Asset} from 'react-native-image-picker';
+
 import {
   SafeAreaView,
   StatusBar,
@@ -21,7 +21,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import { Face } from './components/Face'
+import { Face, Rect } from './components/Face'
 
 const mainbg = "#ebebd3";
 
@@ -93,8 +93,10 @@ function App(): JSX.Element {
   });
   
   // Define state variables for "global data"
-  const [ catListState, setCatListState ] = useState(catList.slice());
-  const [ imageState, setImageState ] = useState(null);
+  const [ imgA, setImageA ] = useState<Asset | null>(null);
+  const [ rectA, setRectA ] = useState<Rect | null>(null);
+  const [ imgB, setImageB ] = useState<Asset | null>(null);
+  const [ rectB, setRectB ] = useState<Rect | null>(null);
 
   // Event handler to add a cat.
   function Swap() {
@@ -113,15 +115,19 @@ function App(): JSX.Element {
       </View>
       <ScrollView>
         <View style={appStyles.ContainerView}>
-          <Face name="Press Snapshot..."/>
-          <Face name="Press Snapshot..."/>
+          <Face setImage={setImageA} setRect={setRectA}/>
+          <Face setImage={setImageB} setRect={setRectB}/>
         </View>
         <Pressable
           style={({pressed}) => [ appStyles.ButtonBasic, pressed ? appStyles.ButtonDown : appStyles.ButtonUp ]}
           onPress={Swap}
           >
-          <Text style={appStyles.ButtonLabel}>Swap</Text>
+          <Text style={appStyles.ButtonLabel}>Swap Faces</Text>
         </Pressable>
+        <Text>Image A: { imgA ? imgA.uri : "not set" }</Text>
+        <Text>Rect A: { rectA ? JSON.stringify(rectA) : "not set" }</Text>
+        <Text>Image B: { imgB ? imgB.uri : "not set" }</Text>
+        <Text>Rect B: { rectB ? JSON.stringify(rectB) : "not set" }</Text>
         </ScrollView>
     </SafeAreaView>
   );

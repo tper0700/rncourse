@@ -31,6 +31,8 @@ Adding Expo...
 This function has changed since it was documented.
 RCTAppSetupPrepareApp(application, false);
 
+[react-native-image-picker types](https://github.com/react-native-image-picker/react-native-image-picker/blob/main/src/types.ts)
+
 [Main was not defined](https://stackoverflow.com/questions/62649381/invariant-violation-main-has-not-been-registered)
 
 ## References
