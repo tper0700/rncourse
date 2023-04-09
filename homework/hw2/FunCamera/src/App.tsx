@@ -16,28 +16,12 @@ import {
   Pressable,
   useColorScheme,
   View,
-  Image,
-  FlatList,
   ScrollView,
 } from 'react-native';
 
 import { Face, Rect } from './components/Face'
 
 const mainbg = "#ebebd3";
-
-// Everyone has three cats to start!
-let catList = [
-  { id: 0, name: "Fuzzy the cat" },
-  { id: 1, name: "Herbie" },
-  { id: 2, name: "Miki" }
-]
-
-let nextIndex = 3;
-
-// Names you can name your cats
-let moreCatNames = [
-  "Fizzy", "Tiki", "Furby", "Fat cat", "Sphinx", "Cleo", "Boots", "Misty", "Ivy", "Mittens", "Rosie"
-]
 
 ////////////
 // Main application
