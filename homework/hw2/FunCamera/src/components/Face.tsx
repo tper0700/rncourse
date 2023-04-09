@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
 const Face = function(props: { name: string }) {
   const [imageState, setImageState] = useState<Asset | null>(null);
   const [cameraPrompt, setCameraPrompt] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function selectImage(res: ImagePickerResponse) {
     if (res.didCancel) {
@@ -82,7 +83,7 @@ const Face = function(props: { name: string }) {
       return;
     }
     let assets = res["assets"];
-    if (assets && assets.length > 0) {
+    if (assets && assets.length > 0 && assets[0].uri) {
       FaceDetector.detectFacesAsync(assets[0].uri)
       .then((res : FaceDetector.DetectionResult) => {
         console.log("Detector Returned!");
@@ -94,13 +95,19 @@ const Face = function(props: { name: string }) {
           console.log("  (" + x + ", " + y + ") : (" + w + ", " + w + ")");
         }
         if (res.faces.length == 0) {
-          console.log("There are no faces on this picture!");
+          let msg = "There are no faces on this picture!";
+          console.log("error: " + msg);
+          setErrorMessage(msg);
         } else if (res.faces.length > 1) {
-          console.log("There are too many faces in this picture!")
+          let msg = "There are too many faces in this picture!";
+          console.log("error: " + msg);
+          setErrorMessage(msg);
         } else {
-          setImageState(assets[0] as object);
+          if (assets) {
+            setImageState(assets[0] as object);
+          }
+          setCameraPrompt(false);
         }
-        setCameraPrompt(false);
       });
     }
   }
@@ -122,11 +129,6 @@ const Face = function(props: { name: string }) {
     launchCamera(options, selectImage);
   }
 
-  function ClosePrompt() {
-    console.log("Close camera prompt");
-    setCameraPrompt(false);
-  }
-
 return <View style={styles.ContainerView}>
     <View style={styles.View}>
       <Image source={imageState ? imageState : images.question}
@@ -145,9 +147,20 @@ return <View style={styles.ContainerView}>
       transparent={true}
       visible={cameraPrompt}
       supportedOrientations={["portrait", "landscape"]}
-      onRequestClose={ClosePrompt}>
+      onRequestClose={() => {setCameraPrompt(false)}}
+      >
       <View style={styles.PromptContainer}>
+        {
+          errorMessage != "" ?
         <View style={styles.PromptView}>
+          <Text style={styles.Text}>{errorMessage}</Text>
+          <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => setErrorMessage("")}
+            >
+            <Text style={styles.ButtonLabel}>Ok</Text>
+          </Pressable>
+        </View> : <View style={styles.PromptView}>
           <Text style={styles.Text}>Choose a camera</Text>
           <View style={styles.PromptButtons}>
           <Pressable
@@ -176,6 +189,7 @@ return <View style={styles.ContainerView}>
             <Text style={styles.ButtonLabel}>Cancel</Text>
           </Pressable>
         </View>
+        }
       </View>
     </Modal>
     </View>;
