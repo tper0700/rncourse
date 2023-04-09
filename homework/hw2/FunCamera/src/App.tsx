@@ -18,6 +18,7 @@ import {
   View,
   Image,
   FlatList,
+  ScrollView,
 } from 'react-native';
 
 import { Face } from './components/Face'
@@ -59,7 +60,7 @@ function App(): JSX.Element {
       justifyContent: "center",
     },  
     Heading: {
-      height: 150,
+      height: 85,
       backgroundColor: headingbg,
       alignItems: "center",
       justifyContent: "center",
@@ -93,7 +94,6 @@ function App(): JSX.Element {
   
   // Define state variables for "global data"
   const [ catListState, setCatListState ] = useState(catList.slice());
-  const [ countState, setCountState ] = useState("You have " + catList.length + " cats.");
   const [ imageState, setImageState ] = useState(null);
 
   // Event handler to add a cat.
@@ -110,18 +110,19 @@ function App(): JSX.Element {
       <View style={appStyles.Heading}>
         <Text style={appStyles.TitleText}>Fun Camera</Text>
         <Text style={appStyles.SubTitle}>take a few face snaps!</Text>
-        <Text style={appStyles.SubTitle}>{countState}</Text>
       </View>
-      <View style={appStyles.ContainerView}>
-      <Face name="Press Snapshot..."/>
-      <Face name="Press Snapshot..."/>
-      </View>
-      <Pressable
-        style={({pressed}) => [ appStyles.ButtonBasic, pressed ? appStyles.ButtonDown : appStyles.ButtonUp ]}
-        onPress={Swap}
-        >
-        <Text style={appStyles.ButtonLabel}>Swap</Text>
-      </Pressable>
+      <ScrollView>
+        <View style={appStyles.ContainerView}>
+          <Face name="Press Snapshot..."/>
+          <Face name="Press Snapshot..."/>
+        </View>
+        <Pressable
+          style={({pressed}) => [ appStyles.ButtonBasic, pressed ? appStyles.ButtonDown : appStyles.ButtonUp ]}
+          onPress={Swap}
+          >
+          <Text style={appStyles.ButtonLabel}>Swap</Text>
+        </Pressable>
+        </ScrollView>
     </SafeAreaView>
   );
 }

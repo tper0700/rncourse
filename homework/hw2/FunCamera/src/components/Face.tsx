@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import {Text, Image, View, StyleSheet, Pressable} from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {Modal, Text, Image, View, StyleSheet, Pressable} from 'react-native';
+import {launchCamera, launchImageLibrary, Asset, ImagePickerResponse, CameraType, MediaType} from 'react-native-image-picker';
+
+import {images} from "../../assets";
+
+const headingbg = "#262424";
+const headingfg = "#e5dada";
 
 const styles = StyleSheet.create({
   ContainerView: {
     flexDirection: "column",
-    width: 180,
     height: 255,
   },
   View: {
@@ -45,51 +49,116 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     fontSize: 20,
     color: "white",
+  },
+  PromptContainer: {
+    flexDirection: "column",
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  PromptView: {
+    padding: 8,
+    marginTop: 15,
+    marginBottom: 60,
+    backgroundColor: headingbg,
+    borderRadius: 8,
+  },
+  PromptButtons: {
+    flexDirection: "row",
+    alignItems: "center",
   }
 });
 
-// Creates a single row representing a cat that can be deleted.
-// Expects a FlatList entry with an item containing id, name and delete events.
+// A single user picture pane.
 const Face = function(props: { name: string }) {
-  const [fileState, setFileState] = useState(null);
-  const [imageState, setImageState] = useState(null);
+  const [imageState, setImageState] = useState<Asset | null>(null);
+  const [cameraPrompt, setCameraPrompt] = useState(false);
 
-  function selectImage(res) {
+  function selectImage(res: ImagePickerResponse) {
     if (res.didCancel) {
       console.log("ignoring canceled snap...");
       return;
     }
     let assets = res["assets"];
-    if (assets.length > 0) {
-      console.log(assets);
-      setImageState(assets[0]);  
+    if (assets && assets.length > 0) {
+      setImageState(assets[0] as object);  
     }
+    setCameraPrompt(false);
   }
 
-  function Snapshot(name: string) {
-    console.log("snaphot: " + name);
+  function LoadFromFile() {
+    console.log("from file...");
     let options = {
-      "mediaType": "photo",
-      "cameraType": "front",
-    }
+      "mediaType": "photo" as MediaType,
+    };
+    launchImageLibrary(options, selectImage);
+  }
+
+  function Snapshot(camera : CameraType) {
+    console.log("snaphot: " + camera);
+    let options = {
+      "mediaType": "photo" as MediaType,
+      "cameraType": camera,
+    };
     launchCamera(options, selectImage);
+  }
+
+  function ClosePrompt() {
+    console.log("Close camera prompt");
+    setCameraPrompt(false);
   }
 
 return <View style={styles.ContainerView}>
     <View style={styles.View}>
-      { imageState &&
-      <Image source={imageState} style={{ width: 180, height: 200 }} />}
-      { !imageState &&
-      <Text style={styles.Text}>{props.name}</Text>}
+      <Image source={imageState ? imageState : images.question}
+        style={{ width: 180, height: 200 }} />
     </View>
     <View style={styles.ButtonView}>
       <Pressable
         style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-        onPress={() => Snapshot(props.name)}
+        onPress={() => setCameraPrompt(true)}
         >
-        <Text style={styles.ButtonLabel}>Snapshot</Text>
+        <Text style={styles.ButtonLabel}>Take Photo</Text>
       </Pressable>
     </View>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={cameraPrompt}
+      supportedOrientations={["portrait", "landscape"]}
+      onRequestClose={ClosePrompt}>
+      <View style={styles.PromptContainer}>
+        <View style={styles.PromptView}>
+          <Text style={styles.Text}>Choose a camera</Text>
+          <View style={styles.PromptButtons}>
+          <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => Snapshot("back" as CameraType)}
+            >
+            <Text style={styles.ButtonLabel}>Back Camera</Text>
+          </Pressable>
+          <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => Snapshot("front" as CameraType)}
+            >
+            <Text style={styles.ButtonLabel}>Front Camera</Text>
+          </Pressable>
+          </View>
+          <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => LoadFromFile()}
+            >
+            <Text style={styles.ButtonLabel}>Load from Phone</Text>
+          </Pressable>
+          <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => setCameraPrompt(false)}
+            >
+            <Text style={styles.ButtonLabel}>Cancel</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
     </View>;
 };
 
