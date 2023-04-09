@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {Modal, Text, Image, View, StyleSheet, Pressable} from 'react-native';
 import {launchCamera, launchImageLibrary, Asset, ImagePickerResponse, CameraType, MediaType} from 'react-native-image-picker';
 
+import * as FaceDetector from 'expo-face-detector';
+
 import {images} from "../../assets";
 
 const headingbg = "#262424";
@@ -81,9 +83,26 @@ const Face = function(props: { name: string }) {
     }
     let assets = res["assets"];
     if (assets && assets.length > 0) {
-      setImageState(assets[0] as object);  
+      FaceDetector.detectFacesAsync(assets[0].uri)
+      .then((res : FaceDetector.DetectionResult) => {
+        console.log("Detector Returned!");
+        for (let face of res.faces) {
+          let x = face.bounds.origin.x;
+          let y = face.bounds.origin.y;
+          let h = face.bounds.size.height;
+          let w = face.bounds.size.width;
+          console.log("  (" + x + ", " + y + ") : (" + w + ", " + w + ")");
+        }
+        if (res.faces.length == 0) {
+          console.log("There are no faces on this picture!");
+        } else if (res.faces.length > 1) {
+          console.log("There are too many faces in this picture!")
+        } else {
+          setImageState(assets[0] as object);
+        }
+        setCameraPrompt(false);
+      });
     }
-    setCameraPrompt(false);
   }
 
   function LoadFromFile() {
