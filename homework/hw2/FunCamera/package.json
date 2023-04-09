@@ -10,9 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "expo": "^48.0.10",
     "react": "18.2.0",
     "react-native": "0.71.5",
-    "react-native-image-picker": "^5.3.1"
+    "react-native-image-picker": "^5.3.1",
+    "expo-face-detector": "~12.1.1",
+    "expo-constants": "~14.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

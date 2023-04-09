@@ -25,8 +25,22 @@ npx react-native run-ios
 
 ## Details
 
+### Challenges
+Adding Expo...
+
+This function has changed since it was documented.
+RCTAppSetupPrepareApp(application, false);
+
+[Main was not defined](https://stackoverflow.com/questions/62649381/invariant-violation-main-has-not-been-registered)
+
 ## References
 
 [How to Use React-Native-Image-Picker](https://javascript.plainenglish.io/using-react-native-image-picker-4495776c8bae)
 
 [Question Mark icon from](https://icons8.com/icon/80933/question-mark)
+
+[Follow Expo install instructions](https://docs.expo.dev/bare/installing-expo-modules/)
+
+[Follow Expo Face Detector install](https://github.com/expo/expo/tree/sdk-48/packages/expo-face-detector)
+
+[Usage Instructions]
