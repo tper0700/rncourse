@@ -43,4 +43,12 @@ RCTAppSetupPrepareApp(application, false);
 
 [Follow Expo Face Detector install](https://github.com/expo/expo/tree/sdk-48/packages/expo-face-detector)
 
-[Usage Instructions]
+[FaceDetector Usage](https://docs.expo.dev/versions/latest/sdk/facedetector/#facefeaturebounds)
+
+[ReactNative OpenCV: drop to C++ and implement natively](https://medium.com/hackernoon/how-to-use-opencv-in-react-native-for-image-processing-db997e73678c)
+
+[React Native Photo Manipulator](https://openbase.com/js/react-native-photo-manipulator)
+
+[JIMP](https://github.com/jimp-dev/jimp)
+
+[Getting started with JIMP](https://www.section.io/engineering-education/jimp-image-processing/)
