@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import {Asset} from 'react-native-image-picker';
-import Jimp from "jimp";
+import RNPhotoManipulator from 'react-native-photo-manipulator';
 import { Rect } from "./Face";
 
 import {
@@ -29,7 +29,15 @@ const Swapper = function(props: {
 
   // Swap pictures
   function Swap() {
-    console.log("swap pictures")
+    if (!props.imgA || !props.imgB || !props.rectA || !props.rectB) {
+      console.log("Unexpected swap without images");
+      return;
+    }
+    let pathA = props.imgA.uri ? props.imgA.uri : "";
+    let pathB = props.imgB.uri ? props.imgB.uri : "";
+
+    console.log("Swap A : " + pathA);
+    console.log("Swap B : " + pathB);
   }
 
   return props.imgA && props.imgB ? <View>
