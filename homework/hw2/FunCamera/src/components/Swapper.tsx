@@ -25,10 +25,12 @@ const Swapper = function(props: {
     rectA: Rect | null,
     imgB: Asset | null,
     rectB: Rect | null,
+    setA: Function,
+    setB: Function,
   }) {
 
   // Swap pictures
-  function Swap() {
+  async function Swap() {
     if (!props.imgA || !props.imgB || !props.rectA || !props.rectB) {
       console.log("Unexpected swap without images");
       return;
@@ -36,8 +38,17 @@ const Swapper = function(props: {
     let pathA = props.imgA.uri ? props.imgA.uri : "";
     let pathB = props.imgB.uri ? props.imgB.uri : "";
 
-    console.log("Swap A : " + pathA);
-    console.log("Swap B : " + pathB);
+    try {
+      let cropA = await RNPhotoManipulator.crop(pathA, props.rectA);
+      let cropB = await RNPhotoManipulator.crop(pathB, props.rectB);
+
+      let asA : Asset = {uri: cropA};
+      let asB : Asset = {uri: cropB};
+      props.setA(asA);
+      props.setB(asB);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return props.imgA && props.imgB ? <View>
@@ -47,10 +58,6 @@ const Swapper = function(props: {
         >
         <Text style={styles.ButtonLabel}>Swap Faces</Text>
     </Pressable>
-    <Text>Image A: { props.imgA ? props.imgA.uri : "not set" }</Text>
-    <Text>Rect A: { props.rectA ? JSON.stringify(props.rectA) : "not set" }</Text>
-    <Text>Image B: { props.imgB ? props.imgB.uri : "not set" }</Text>
-    <Text>Rect B: { props.rectB ? JSON.stringify(props.rectB) : "not set" }</Text>
     </View> : <View>
     <Text>Select Some images to swap!</Text>
     </View>

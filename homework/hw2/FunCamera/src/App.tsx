@@ -20,6 +20,7 @@ import {
 import { Face, Rect } from './components/Face';
 import { Swapper } from './components/Swapper';
 import { styles, headingBG } from './Styles';
+import { Output } from './components/Output';
 
 ////////////
 // Main application
@@ -30,6 +31,9 @@ function App(): JSX.Element {
   const [ rectA, setRectA ] = useState<Rect | null>(null);
   const [ imgB, setImageB ] = useState<Asset | null>(null);
   const [ rectB, setRectB ] = useState<Rect | null>(null);
+
+  const [ swapA, setSwapA ] = useState<Asset | null>(null);
+  const [ swapB, setSwapB ] = useState<Asset | null>(null);
 
   return (
     <SafeAreaView style={styles.Main}>
@@ -51,7 +55,16 @@ function App(): JSX.Element {
           rectA={rectA}
           imgB={imgB}
           rectB={rectB}
+          setA={setSwapA}
+          setB={setSwapB}
         />
+        {
+          swapA && swapB ? <View style={styles.ContainerView}>
+          <Output imageFile={swapA}/>
+          <Output imageFile={swapB}/>
+        </View> : <Text>No output yet...</Text>
+        }
+        
       </ScrollView>
     </SafeAreaView>
   );

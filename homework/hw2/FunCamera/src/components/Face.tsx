@@ -10,8 +10,8 @@ import { styles } from '../Styles';
 export interface Rect {
   x: number,
   y: number,
-  w: number,
-  h: number,
+  width: number,
+  height: number,
 }
 
 // A single user picture pane.
@@ -46,8 +46,8 @@ const Face = function(props: {
           let r : Rect = {
             x: face.bounds.origin.x,
             y: face.bounds.origin.y,
-            h: face.bounds.size.height,
-            w: face.bounds.size.width,
+            height: face.bounds.size.height,
+            width: face.bounds.size.width,
           };
           console.log("rect : " + JSON.stringify(r));
           if (assets) {
