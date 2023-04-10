@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {Modal, Text, Image, View, StyleSheet, Pressable} from 'react-native';
 import {launchCamera, launchImageLibrary, Asset, ImagePickerResponse, CameraType, MediaType} from 'react-native-image-picker';
+import { CameraRoll, SaveToCameraRollOptions } from "@react-native-camera-roll/camera-roll";
 
 import * as FaceDetector from 'expo-face-detector';
 
@@ -13,6 +14,9 @@ const Output = function(props: {
 }) {
 function saveFile() {
   console.log("Save: " + props.imageFile);
+  if (props.imageFile && props.imageFile.uri) {
+    CameraRoll.save(props.imageFile.uri, "photo" as SaveToCameraRollOptions);
+  }
 }
 
 return <View style={styles.ModalContainer}>

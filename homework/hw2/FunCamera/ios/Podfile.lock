@@ -408,6 +408,8 @@ PODS:
   - React-jsinspector (0.71.5)
   - React-logger (0.71.5):
     - glog
+  - react-native-cameraroll (5.3.1):
+    - React-Core
   - react-native-image-picker (5.3.1):
     - React-Core
   - react-native-photo-manipulator (1.2.7):
@@ -557,6 +559,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-photo-manipulator (from `../node_modules/react-native-photo-manipulator`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -663,6 +666,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-cameraroll:
+    :path: "../node_modules/@react-native-camera-roll/camera-roll"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-photo-manipulator:
@@ -751,6 +756,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 1579bf3207afadc72ac3638a66a102d1bf5263e3
   React-jsinspector: 14a342151ab810862998dfc99e2720746734e9b3
   React-logger: 94ec392ae471683635e4bf874d4e82f675399d2d
+  react-native-cameraroll: f3050460fe1708378698c16686bfaa5f34099be2
   react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-photo-manipulator: dce015c4d602abb529931a40d9d34c277ee478b8
   React-perflogger: 883a55a9a899535eaf06d0029108ef9ef22cce92
