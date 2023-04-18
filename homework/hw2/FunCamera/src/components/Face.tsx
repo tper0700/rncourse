@@ -19,17 +19,26 @@ const Face = function(props: {
   setImage: Function,
   setRect: Function,
 }) {
+  // Image information itself
   const [imageState, setImageState] = useState<Asset | null>(null);
+  // Is the modal view to prompt for a camera open?
   const [cameraPrompt, setCameraPrompt] = useState(false);
+  // Is there an error message to display? What is the error?
   const [errorMessage, setErrorMessage] = useState("");
 
+  // selectImage
+  // Handles the output of Image Picker: if an image was selected,
+  // this handler processes it through google ML.
   function selectImage(res: ImagePickerResponse) {
     if (res.didCancel) {
       console.log("ignoring canceled snap...");
       return;
     }
+    // Image picker returns multiple images,
+    // but we configured it for a single image.
     let assets = res["assets"];
     if (assets && assets.length > 0 && assets[0].uri) {
+      // We have an image, use FaceDetector on it.
       FaceDetector.detectFacesAsync(assets[0].uri)
       .then((res : FaceDetector.DetectionResult) => {
         if (res.faces.length == 0) {
@@ -42,6 +51,7 @@ const Face = function(props: {
           setErrorMessage(msg);
         } else {
           console.log("Detector returned a face")
+          // No errors, pick up the FaceDetector results.
           let face = res.faces[0];
           let r : Rect = {
             x: face.bounds.origin.x,
@@ -51,7 +61,11 @@ const Face = function(props: {
           };
           console.log("rect : " + JSON.stringify(r));
           if (assets) {
+            // FaceDetector can take a while, if assets is still valid...
+            // show taken image in the UI via setImageState
             setImageState(assets[0] as object);
+
+            // Also send image and FaceDetector output to client.
             props.setImage(assets[0] as object);
             props.setRect(r);
           }
@@ -61,6 +75,7 @@ const Face = function(props: {
     }
   }
 
+  // Handler for load from file button launches imager picker
   function LoadFromFile() {
     console.log("from file...");
     let options = {
@@ -69,6 +84,7 @@ const Face = function(props: {
     launchImageLibrary(options, selectImage);
   }
 
+  // Handler for front/back buttons launches camera.
   function Snapshot(camera : CameraType) {
     console.log("snaphot: " + camera);
     let options = {

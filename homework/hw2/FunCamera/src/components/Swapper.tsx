@@ -4,14 +4,9 @@ import { PhotoManipulator, Point } from 'react-native-photo-manipulator';
 import { Rect } from "./Face";
 
 import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
   Text,
   Pressable,
-  useColorScheme,
   View,
-  ScrollView,
 } from 'react-native';
 
 import { styles } from '../Styles';
@@ -19,7 +14,7 @@ import { styles } from '../Styles';
 const mainbg = "#ebebd3";
 
 ////////////
-// Main application
+// Implements the swap faces button using RN-Photo-Manipulator
 const Swapper = function(props: {
     imgA: Asset | null,
     rectA: Rect | null,

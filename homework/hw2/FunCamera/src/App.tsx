@@ -7,8 +7,6 @@
 
 import React, { useState, useRef } from 'react';
 import {Asset} from 'react-native-image-picker';
-import Jimp from "jimp";
-
 import {
   SafeAreaView,
   StatusBar,
@@ -17,21 +15,36 @@ import {
   ScrollView,
 } from 'react-native';
 
+// Face component to show an input picture, and handle the buttons for taking pictures.
 import { Face, Rect } from './components/Face';
+
+// Swapper component implements the swap of faces.
 import { Swapper } from './components/Swapper';
+
+// UI Styles
 import { styles, headingBG } from './Styles';
+
+// Output component shows an output image and handles saving the file to device.
 import { Output } from './components/Output';
 
 ////////////
 // Main application
+// Presents 3 main elements:
+// 1. A view with two images representing the user input images
+// 2. A Swapper component, when two images are selected, 
+//    it displays a button to swap faces.
+// 3. A view with two output images, this view is only shown once
+//    output swapped images have been created.
 function App(): JSX.Element {
 
-  // Define state variables for "global data"
+  // Left input image file and face rect
   const [ imgA, setImageA ] = useState<Asset | null>(null);
   const [ rectA, setRectA ] = useState<Rect | null>(null);
+  // Right input image file and face rect
   const [ imgB, setImageB ] = useState<Asset | null>(null);
   const [ rectB, setRectB ] = useState<Rect | null>(null);
 
+  // Output swapped images
   const [ swapA, setSwapA ] = useState<Asset | null>(null);
   const [ swapB, setSwapB ] = useState<Asset | null>(null);
 
