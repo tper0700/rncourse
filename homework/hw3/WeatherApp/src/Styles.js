@@ -25,12 +25,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  input: {
+  Input: {
     height: 40,
     margin: 12,
     borderWidth: 1,
     padding: 10,
     fontSize: 16,
+    color: mainfg,
   },
   Icon: {
     width: 75,
@@ -68,6 +69,26 @@ const styles = StyleSheet.create({
   },
   ArticleBody: {
     flex:1,
+  },
+  ButtonBasic: {
+    height: 45,
+    justifyContent: "center",
+    alignContent: "center",
+    borderRadius: 8,
+    padding: 10,
+    margin: 2,
+  },
+  ButtonUp: {
+    backgroundColor: "orange",
+  },
+  ButtonDown: {
+    backgroundColor: "red",
+  },
+  ButtonLabel: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 20,
+    color: "white",
   },
 });
 
