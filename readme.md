@@ -12,3 +12,6 @@ https://app.slack.com/client/T05077VSPG9/C051FBDR51U/thread/C04VB3G5CLU-16807438
 
 https://www.fullstacklabs.co/blog/react-native-camera
 (check out expo-camera)
+
+Final Project
+* Camera taking pictures of plants, and taking soil humidity readings from external sensor. Upload to results to a tracking API to watch plants grow.

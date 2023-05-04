@@ -18,20 +18,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "center",
+    backgroundColor: "headingBG",
   },  
   Heading: {
     height: 85,
     backgroundColor: headingBG,
     alignItems: "center",
     justifyContent: "center",
-  },
-  Input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-    fontSize: 16,
-    color: mainfg,
   },
   Icon: {
     width: 75,
@@ -51,32 +44,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: mainfg
   },
-  ArticleHead: {
-    paddingBottom: 0,
-    paddingLeft:5,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: articlefg,
-  },
-  Abstract: {
-    paddingBottom: 0,
-    paddingLeft:5,
-    fontSize: 14,
-    color: mainfg
-  },
-  ArticleContainer: {
-    flexDirection: "row",
-  },
-  ArticleBody: {
-    flex:1,
+  Input: {
+    height: 40,
+    margin: 8,
+    borderWidth: 1,
+    padding: 10,
+    fontSize: 16,
+    color: mainfg,
+    flex: 1,
   },
   ButtonBasic: {
-    height: 45,
+    height: 40,
     justifyContent: "center",
     alignContent: "center",
     borderRadius: 8,
     padding: 10,
-    margin: 2,
+    margin: 8,
   },
   ButtonUp: {
     backgroundColor: "orange",

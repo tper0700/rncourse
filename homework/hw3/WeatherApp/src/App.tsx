@@ -7,62 +7,59 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  RefreshControl,
   SafeAreaView,
   StatusBar,
   Text,
   View,
-  FlatList,
-  Image,
   TextInput,
-  Linking,
   Pressable,
-  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
-
-const API_KEY = "3e4cbeb9ad9614d13c4a6c7db8441829";
-const API_REVERSE = "http://api.openweathermap.org/geo/1.0/reverse?"
-const API_LOOKUP = "http://api.openweathermap.org/geo/1.0/direct?"
-const API_WEATHER = "https://api.openweathermap.org/data/2.5/weather?"
 
 import Geolocation from '@react-native-community/geolocation';
 
 // UI Styles
 import { styles, headingBG } from './Styles';
 
-type coord = {
-  "lon": number,
-  "lat": number,
-}
+// App components
+import { weather, Weather } from './components/weather';
+import { coord, location, LocationList } from './components/locationlist';
+import { Error } from './components/error';
 
-type location = {
-  "location": string,
-  "coord": coord,
-  "id": number,
-}
-
-type weather = {
-  "temp": string,
-  "weather": string,
-  "min": string,
-  "max": string,
-}
+// Key and APIs for open weather map
+const API_KEY = "3e4cbeb9ad9614d13c4a6c7db8441829";
+const API_REVERSE = "http://api.openweathermap.org/geo/1.0/reverse?"
+const API_LOOKUP = "http://api.openweathermap.org/geo/1.0/direct?"
+const API_WEATHER = "https://api.openweathermap.org/data/2.5/weather?"
 
 ////////////
 // Main application
 function App(): JSX.Element {
 
+  // User selected location
   const [location, setLocation] = useState<string>("");
+
+  // error to display
   const [error, setError] = useState<string>("");
+
+  // location options for customer input
   const [options, setOptions] = useState<location[]|null>(null);
+
+  // current conditions at location
   const [conditions, setConditions] = useState<weather|null>(null);
 
-  async function setCoords(c: coord) {
+  /*
+  getWeather: when a user selects a location call weather API to 
+  get latest weather.
+   */
+  async function getWeather(c: coord) {
     let uri = `${API_WEATHER}lat=${c.lat}&lon=${c.lon}&units=metric&appid=${API_KEY}`;
     let response = await fetch(uri);
     let json = await response.json();
     if (json.hasOwnProperty("cod") && json.cod != 200) {
-      setError(json["message"]);
+      setError("City not found, server error: " + json["message"]);
+      setConditions(null);
     } else {
       let result : weather = {
         "temp": json.main.temp,
@@ -75,28 +72,37 @@ function App(): JSX.Element {
     }
   }
 
-  // Update the system and render the weather.
+  /*
+  setLocationByCoord: If the coordinates are known (i.e. current
+  location), call OpenWeather to get the city name and update the app
+  coordinates to the closest city.
+
+  Also, update the weather in this case.
+   */
   async function setLocationByCoord(c : coord) {
     let uri = `${API_REVERSE}lat=${c.lat}&lon=${c.lon}&appid=${API_KEY}`;
     let response = await fetch(uri);
     let json = await response.json();
     if (json.hasOwnProperty("cod")) {
-      setError(json["message"]);
+      setError("City not found, server error: " + json["message"]);
+      setConditions(null);
     } else {
       let city = json[0]
       setLocation(city["state"] ?
         `${city["name"]}, ${city["state"]}, ${city["country"]}` :
         `${city["name"]}, ${city["country"]}`);
-      setCoords({
+      getWeather({
         "lat": city["lat"],
         "lon": city["lon"],
       })
     }
   }
 
-  // Get current location from system and resolve location name
+  /*
+  getCurrentLocation(): Call GeoLocation to get curent location 
+   */
   function getCurrentLocation() {
-    setError(null);
+    setError("");
     setOptions(null);
     Geolocation.getCurrentPosition((info) => {
       let c : coord = {
@@ -107,15 +113,22 @@ function App(): JSX.Element {
     });
   }
 
+  /*
+  setNewLocation: Handle user search for a location string.
+  Displays a menu of options through options state if multiple
+  cities match search, or sets the weather if only one city found.
+   */
   async function setNewLocation(value: string) {
-    setError(null);
+    setError("");
     setOptions(null);
     let uri = `${API_LOOKUP}q=${value}&limit=5&appid=${API_KEY}`;
     let response = await fetch(uri);
     let json = await response.json();
     if (json.hasOwnProperty("cod")) {
-      setError(json["message"]);
+      setError("City not found, server error: " + json["message"]);
+      setConditions(null);
     } else {
+      // Map OpenWeather city list to a list of locations.
       let o = json.map((city, index) => ({
           "location": city["state"] ?
             `${city["name"]}, ${city["state"]}, ${city["country"]}` :
@@ -129,6 +142,9 @@ function App(): JSX.Element {
 
       if (o.length == 1) {
         selectOption(o[0]);
+      } else if (o.length == 0) {
+        setError("City not found, try again.")
+        setConditions(null);
       } else {
         setOptions(o);
         setConditions(null);
@@ -136,24 +152,17 @@ function App(): JSX.Element {
     }
   }
 
+  /*
+  selectOption: set the weather for the location selected by the user.
+   */
   function selectOption(option: location) {
-    setCoords(option.coord);
+    getWeather(option.coord);
     setLocation(option.location);
+    setOptions(null);
   }
 
+  // On startup, get the current weather for the current location.
   useEffect(() => { getCurrentLocation(); }, []);
-
-  const OptionItem = (props) => (
-    <View>
-      <Pressable
-        style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-        onPress={() => { selectOption(props.option); setOptions(null)} }
-        >
-      <Text>{props.option.location}</Text>
-      <Text>({props.option.coord.lat}, {props.option.coord.lon})</Text>
-      </Pressable>
-    </View>
-  );
 
   return (
     <SafeAreaView style={styles.Main}>
@@ -161,48 +170,38 @@ function App(): JSX.Element {
         barStyle={'light-content'}
         backgroundColor={headingBG}
       />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.Heading}>
         <Text style={styles.TitleText}>WeatherApp</Text>
         <Text style={styles.SubTitle}>powered by OpenWeather</Text>
       </View>
-        {
-          error ? <View>
-            <Text style={styles.Text}>Error from server</Text>
-            <Text style={styles.Text}>{error}</Text>
-          </View> : null
-        }
-          <View>
-            <TextInput
-              style={styles.Input}
-              onChangeText={setLocation}
-              onSubmitEditing={(value) => setNewLocation(value.nativeEvent.text)}
-              value={location}
-              placeholder="Please select a location."
-              keyboardType="default"
-              selectTextOnFocus={true}
-            />
-            <Pressable
+      </TouchableWithoutFeedback>
+        <Error error={error}/>
+        <View style={styles.ContainerView}>
+          <Pressable
             style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
             onPress={getCurrentLocation}
             >
-              <Text>Reset to here</Text>
-            </Pressable>
-          </View>
-        {
-          options ? <FlatList
-            data={options}
-            renderItem={({item}) => <OptionItem option={item} />}
-            keyExtractor={item => item.id}
-            /> : null
-        }
-        {
-          conditions ? <View>
-            <Text style={styles.Text}>Weather Conditions: {conditions.weather}</Text>
-            <Text style={styles.Text}>Current Temp: {conditions.temp} C</Text>
-            <Text style={styles.Text}>Min Temp: {conditions.min} C</Text>
-            <Text style={styles.Text}>Max Temp: {conditions.max} C</Text>
-          </View> : null
-        }
+            <Text>Here</Text>
+          </Pressable>
+          <TextInput
+            style={styles.Input}
+            onChangeText={setLocation}
+            onSubmitEditing={(value) => setNewLocation(value.nativeEvent.text)}
+            value={location}
+            placeholder="Please select a location."
+            keyboardType="default"
+            selectTextOnFocus={true}
+          />
+          <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => {setNewLocation(location)}}
+            >
+            <Text>Search</Text>
+          </Pressable>
+        </View>
+        <LocationList onSelect={selectOption} options={options}/>
+        <Weather conditions={conditions}/>
     </SafeAreaView>
   );
 }
