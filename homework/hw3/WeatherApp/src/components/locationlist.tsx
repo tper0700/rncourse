@@ -20,17 +20,17 @@ const LocationList = function(props: {
   options: location[] | null,
   onSelect: Function,
 }) {
-  let options : location[] | null = props.options;
+  let options : location[] = props.options;
   let onSelect = props.onSelect;
 
-  const OptionItem = (option : location) => (
+  const OptionItem = (props) => (
     <View>
       <Pressable
         style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-        onPress={() => { onSelect(option); } }
+        onPress={() => { onSelect(props.option); } }
         >
-      <Text>{option.location}</Text>
-      <Text>({option.coord.lat}, {option.coord.lon})</Text>
+      <Text>{props.option.location}</Text>
+      <Text>({props.option.coord.lat}, {props.option.coord.lon})</Text>
       </Pressable>
     </View>
   );
