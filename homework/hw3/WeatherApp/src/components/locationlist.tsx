@@ -17,20 +17,20 @@ type location = {
 // Displays a list of locations.
 // Used when user searches for a city with multiple matches.
 const LocationList = function(props: {
-  options: location | null,
+  options: location[] | null,
   onSelect: Function,
 }) {
-  let options = props.options;
+  let options : location[] | null = props.options;
   let onSelect = props.onSelect;
 
-  const OptionItem = (props) => (
+  const OptionItem = (option : location) => (
     <View>
       <Pressable
         style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-        onPress={() => { onSelect(props.option); } }
+        onPress={() => { onSelect(option); } }
         >
-      <Text>{props.option.location}</Text>
-      <Text>({props.option.coord.lat}, {props.option.coord.lon})</Text>
+      <Text>{option.location}</Text>
+      <Text>({option.coord.lat}, {option.coord.lon})</Text>
       </Pressable>
     </View>
   );

@@ -58,7 +58,8 @@ function App(): JSX.Element {
     let response = await fetch(uri);
     let json = await response.json();
     if (json.hasOwnProperty("cod") && json.cod != 200) {
-      setError("City not found, server error: " + json["message"]);
+      // server returned error
+      setError("Weather info not found, server error: " + json["message"]);
       setConditions(null);
     } else {
       let result : weather = {
@@ -80,10 +81,13 @@ function App(): JSX.Element {
   Also, update the weather in this case.
    */
   async function setLocationByCoord(c : coord) {
+    // Call lot/long to location name API
     let uri = `${API_REVERSE}lat=${c.lat}&lon=${c.lon}&appid=${API_KEY}`;
     let response = await fetch(uri);
     let json = await response.json();
+
     if (json.hasOwnProperty("cod")) {
+      // server returned error
       setError("City not found, server error: " + json["message"]);
       setConditions(null);
     } else {
@@ -121,10 +125,14 @@ function App(): JSX.Element {
   async function setNewLocation(value: string) {
     setError("");
     setOptions(null);
+
+    // Query location name API
     let uri = `${API_LOOKUP}q=${value}&limit=5&appid=${API_KEY}`;
     let response = await fetch(uri);
     let json = await response.json();
+
     if (json.hasOwnProperty("cod")) {
+      // cod property has error message
       setError("City not found, server error: " + json["message"]);
       setConditions(null);
     } else {
@@ -141,11 +149,14 @@ function App(): JSX.Element {
         }));
 
       if (o.length == 1) {
+        // Only one location matches search, set weather.
         selectOption(o[0]);
       } else if (o.length == 0) {
+        // No locations, show an error
         setError("City not found, try again.")
         setConditions(null);
       } else {
+        // Multiple locations, show selector.
         setOptions(o);
         setConditions(null);
       }
