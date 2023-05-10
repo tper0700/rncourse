@@ -64,3 +64,6 @@
 
 # Expo files
 **/.expo
+
+## Dev files
+**/init.png

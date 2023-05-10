@@ -1,5 +1,6 @@
-import * as child from 'child_process'
-import mpvAPI from "node-mpv"
+import mpvAPI from 'node-mpv'
+import QRCode from 'qrcode'
+import * as os from "os"
 
 export const MOVIES = [
   {
@@ -32,7 +33,27 @@ export const MOVIES = [
 export const Player = new class {
   constructor() {
     this.mpv = new mpvAPI();
-    this.mpv.start();
+
+    this.init();
+  }
+
+  async init() {
+    await this.mpv.start();
+
+    let server = "http://" + os.hostname() + ":8920/play/" + MOVIES[4].id;
+
+    await QRCode.toFile("./init.png", server, {
+      margin: 10,
+      scale: 20,
+      color: {
+        dark: "#225",
+        light: "#FFF"
+      }
+    });
+
+    this.mpv.loop("inf");
+    this.mpv.fullscreen();
+    this.mpv.load("./init.png");
   }
   
   // TODO: Use MPV IPC
