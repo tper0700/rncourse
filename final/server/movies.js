@@ -1,4 +1,5 @@
 import * as child from 'child_process'
+import mpvAPI from "node-mpv"
 
 export const MOVIES = [
   {
@@ -30,46 +31,23 @@ export const MOVIES = [
 
 export const Player = new class {
   constructor() {
-    this.proc = null;
-  } 
+    this.mpv = new mpvAPI();
+    this.mpv.start();
+  }
   
-  pause() {
-    if (this.proc) {
-      console.log(this.proc);
-      console.log("Pause")
-      this.proc.stdin.cork();
-      this.proc.stdin.write("p\n");
-      this.proc.stdin.uncork();
+  // TODO: Use MPV IPC
+  // https://mpv.io/manual/master/#json-ipc
+  async pause() {
+    if (await this.mpv.isPaused()) {
+      this.mpv.play();
     } else {
-      console.log("No movie playing...")
+      this.mpv.pause();
     }
   }
 
-  play(movie) {
+  async play(movie) {
     console.log("Play: " + movie.name);
-
-    if (this.proc) {
-      this.proc.kill('SIGINT');
-    }
-
-    this.proc = child.spawn("mpv", [movie.uri], {
-      "stdio": ['pipe', 'pipe', 'pipe']
-    });
-
-    console.log(this.proc);
-
-    /*
-    this.proc.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-    });
-
-    this.proc.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-    });
-    */
-    this.proc.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
-    }); 
+    await this.mpv.load(movie.uri);
   } 
 }
 
