@@ -15,3 +15,5 @@ https://www.fullstacklabs.co/blog/react-native-camera
 
 Final Project
 * Camera taking pictures of plants, and taking soil humidity readings from external sensor. Upload to results to a tracking API to watch plants grow.
+
+* Camera QR code scanner, connect to TV server, and control playback using REST APIs hosted on tv computer. Use Geolocation API to track proximity to a previously connected TV and show UI without re-scanning QR code.
