@@ -6,3 +6,4 @@
 
 [MPV documentation](https://mpv.io/manual/master/#options)
 
+[WiFi Barcode](https://github.com/zxing/zxing/wiki/Barcode-Contents#wi-fi-network-config-android-ios-11)

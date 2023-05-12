@@ -37,12 +37,24 @@ In the media playback screen, the user will be able to return to the QR scanner 
 
 ## Mobile User Interface
 
+When the user starts the application, they are directed to the QR Code scanning page. In this page they can scan a QR code using the camera in the center of the display. If the application detects servers have been detected before nearby (using geolocation), the red button at the bottom takes them to the server selection page.
 
+![QR Code Scanning Page](Wireframe_1.png)
 
-# Requirements
+If the application knows of servers nearby, the application shows those servers in a list in the server selection page below. The user can press the green button to return to the QR Code scanning page.
 
- * [x] A concise project title and brief description.
- * [x] A list of at least three covered topics (API, device sensors, external sensor, BLE, GeoLocation, Camera) that will be integrated into your application.
- * [x] A detailed scope outlining the app's features, functionalities, native APIs, and external APIs (if applicable).
- * [ ] A description of the user interface and user experience, including layout, navigation, design elements, and user feedback mechanisms.
- * [ ] An overview of anticipated technical challenges and potential solutions.
+![Registered Server Selection Page](Wireframe_2.png)
+
+Scanning a QR code, or tapping on a previously detected server, sends the user to the Remote page. The red button at the top of the screen sends the user back to the server 
+selection page.
+
+Selecting a movie from the list starts playback on the server. The play/pause/stop and volume buttons are enabled at this point, and each performs the respective server call.
+
+![Remote Control Page](Wireframe_3.png)
+
+## Anticipated technical challenges
+
+* QR Code scanning functionality: While libraries exist for QR code scanning, compatibility issues may still arise.
+* Disconnecting the application from the server: Need to define a mechanism to "end a session" when a phone goes away. Possibly a keep-alive mechanism, or using BLE if available to recognize the device. Adding a time slider to the app that regularly queries the server for current play time may be an interesting way to resolve this problem.
+* Client authentication mechanism: The server may generate a token in the QR code and reject any requests from network clients that don't have this secret code. The token will have to be persisted on the server so clients can reconnect later.
+* Need a scheme to store discovered displays by GPS coordinates. Will probably store as a simple list and display only those displays within a certain distance.
