@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     fontSize: 16,
+    color: headingfg,
   },
   Icon: {
     width: 75,
@@ -50,24 +51,44 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: mainfg
   },
-  ArticleHead: {
+  TodoTitle: {
     paddingBottom: 0,
     paddingLeft:5,
     fontSize: 18,
     fontWeight: "bold",
     color: articlefg,
   },
-  Abstract: {
+  TodoDescription: {
     paddingBottom: 0,
     paddingLeft:5,
     fontSize: 14,
     color: mainfg
   },
-  ArticleContainer: {
+  TodoContainer: {
     flexDirection: "row",
   },
-  ArticleBody: {
+  Todo: {
     flex:1,
+  },
+  ButtonBasic: {
+    height: 40,
+    justifyContent: "center",
+    alignContent: "center",
+    borderRadius: 8,
+    padding: 10,
+    margin: 8,
+  },
+  ButtonUp: {
+    backgroundColor: "orange",
+  },
+  ButtonDown: {
+    backgroundColor: "red",
+  },
+  ButtonLabel: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 20,
+    color: "white",
   },
 });
 

@@ -10,6 +10,11 @@
       "StackName": "amplify-taskapp-dev-191114",
       "StackId": "arn:aws:cloudformation:us-west-2:437749007943:stack/amplify-taskapp-dev-191114/19190850-f90f-11ed-910f-06064e04ffff",
       "AmplifyAppId": "d3epn3wkt00via"
+    },
+    "categories": {
+      "api": {
+        "taskapp": {}
+      }
     }
   }
 }
