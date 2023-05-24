@@ -21,6 +21,10 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+pod 'react-native-camera', path: '../node_modules/react-native-camera', subspecs: [
+  'BarcodeDetectorMLKit'
+]
+
 target 'Remote' do
   config = use_native_modules!
 

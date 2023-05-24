@@ -24,6 +24,8 @@ import {
 import { styles, headingBG } from './Styles';
 
 import Geolocation from '@react-native-community/geolocation';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 
 type coord = {
   "lon": number,
@@ -34,6 +36,7 @@ type coord = {
 // Main application
 function App(): JSX.Element {
   const [location, setLocation] = useState<coord | null>(null);
+  const [server, setServer] = useState<string>("");
 
   /*
   getCurrentLocation(): Call GeoLocation to get curent location 
@@ -55,6 +58,15 @@ function App(): JSX.Element {
   // On startup, start watching the location
   useEffect(() => { startLocation(); }, []);
 
+  function onScan(e) {
+    let url : string = e.data;
+    if (url.indexOf("http://Titania.local") == 0) {
+      console.log("Got Data:===============")
+      console.log(e.data);  
+      setServer("Connected to Titania");
+    }
+  }
+
   return (
     <SafeAreaView style={styles.Main}>
       <StatusBar
@@ -65,6 +77,17 @@ function App(): JSX.Element {
         <Text style={styles.TitleText}>Remote</Text>
         <Text style={styles.SubTitle}>Remote subtitle!</Text>
       </View>
+      {
+        server == "" ? <RNCamera
+          style={{
+            flex: 1,
+            width: '100%',
+          }}
+          captureAudio={false}
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.off}
+          onBarCodeRead={onScan}
+        ></RNCamera> : <Text style={styles.Text}>{server}</Text> }
       <ScrollView>
         {
           location ? <View>
