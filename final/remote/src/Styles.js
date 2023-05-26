@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   Main: {
     backgroundColor: mainbg,
     flex: 1,
+    width: "100%"
   },
   List: {
     flexGrow: 1,
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
   Heading: {
     height: 85,
     backgroundColor: headingBG,
+    paddingLeft: 10,
     alignItems: "center",
     justifyContent: "center",
   },

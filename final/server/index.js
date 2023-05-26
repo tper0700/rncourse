@@ -1,4 +1,6 @@
 import express from 'express'
+import * as fs from "fs";
+import * as https from "https";
 import {MOVIES, Player} from './movies.js'
 
 const app = express()
@@ -29,6 +31,17 @@ app.get("/play/:id", (req, res) => {
   }
 })
 
-app.listen(8920, () => {
-  console.log("Server running on http://localhost:8920")
+var key = fs.readFileSync("server.key", "utf8");
+var cert = fs.readFileSync("server.crt", "utf8");
+var ca = fs.readFileSync("CA.pem", "utf8");
+var creds = {
+  key: key,
+  cert: cert,
+  rejectUnauthorized: false,
+  ca: [ca],
+};
+
+var server = https.createServer(creds, app);
+server.listen(8920, () => {
+  console.log("Server running on https://localhost:8920");
 });

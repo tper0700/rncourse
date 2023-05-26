@@ -68,3 +68,6 @@
 ## Dev files
 **/init.png
 private_key
+**/server.crt
+**/server.key
+**/CA.pem

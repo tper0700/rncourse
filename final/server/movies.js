@@ -40,9 +40,13 @@ export const Player = new class {
   async init() {
     await this.mpv.start();
 
-    let server = "http://" + os.hostname() + ":8920/play/" + MOVIES[4].id;
+    //let server = "https://" + os.hostname() + ":8920/play/" + MOVIES[4].id;
+    let info = "MEDIASERVER " + JSON.stringify({
+      url: "https://" + os.hostname() + ":8920",
+      name: os.hostname().split(".")[0]
+    });
 
-    await QRCode.toFile("./init.png", server, {
+    await QRCode.toFile("./init.png", info, {
       margin: 10,
       scale: 20,
       color: {

@@ -23,85 +23,64 @@ import {
 // UI Styles
 import { styles, headingBG } from './Styles';
 
-import Geolocation from '@react-native-community/geolocation';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
+import Scanner from './components/Scanner';
+import NearbyServers from './components/NearbyServers';
+import Playlist from './components/ServerPlaylist';
+import { Server, coord } from '../Types';
 
-type coord = {
-  "lon": number,
-  "lat": number,
+
+function PageServerSelection(props: {
+  setServer: Function
+}): JSX.Element {
+  const [location, setLocation] = useState<coord | null>(null);
+
+  return <View style={styles.Main}>
+    <View style={styles.Heading}>
+      <Text style={styles.TitleText}>Remote</Text>
+      <Text style={styles.SubTitle}>Server Selection</Text>
+    </View>
+    <Scanner setServer={props.setServer} location={location}/>
+    <NearbyServers setServer={props.setServer} setLocation={setLocation}></NearbyServers>
+  </View>
+}
+
+function PageServerControl(props: {
+  server: Server,
+  setServer: Function,
+}): JSX.Element {
+  return <View style={styles.Main}>
+    <View style={[styles.Heading, {flexDirection: "row"}]}>
+      <Pressable
+          style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+          onPress={() => props.setServer(null)}
+          >
+          <Text style={styles.ButtonLabel}>Back</Text>
+      </Pressable>
+      <View style={{flex: 1}}>
+        <Text style={styles.TitleText}>{props.server.name}</Text>
+        <Text style={styles.SubTitle}>{props.server.url}</Text>
+      </View>
+    </View>
+    <Playlist server={props.server}/>
+  </View>
 }
 
 ////////////
 // Main application
 function App(): JSX.Element {
-  const [location, setLocation] = useState<coord | null>(null);
-  const [server, setServer] = useState<string>("");
-
-  /*
-  getCurrentLocation(): Call GeoLocation to get curent location 
-   */
-  function startLocation() {
-    Geolocation.getCurrentPosition((position) => {
-      let c : coord = {
-        "lat": Math.round(position.coords.latitude * 100000) / 100000,
-        "lon": Math.round(position.coords.longitude * 100000) / 100000,
-      }
-      console.log(c);
-      setLocation(c);
-    }, undefined, {
-      maximumAge: 0,
-      enableHighAccuracy: true
-    });
-  }
-
-  // On startup, start watching the location
-  useEffect(() => { startLocation(); }, []);
-
-  function onScan(e) {
-    let url : string = e.data;
-    if (url.indexOf("http://Titania.local") == 0) {
-      console.log("Got Data:===============")
-      console.log(e.data);  
-      setServer("Connected to Titania");
-    }
-  }
-
+  const [server, setServer] = useState<Server>(null);
   return (
     <SafeAreaView style={styles.Main}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={headingBG}
       />
-      <View style={styles.Heading}>
-        <Text style={styles.TitleText}>Remote</Text>
-        <Text style={styles.SubTitle}>Remote subtitle!</Text>
-      </View>
       {
-        server == "" ? <RNCamera
-          style={{
-            flex: 1,
-            width: '100%',
-          }}
-          captureAudio={false}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.off}
-          onBarCodeRead={onScan}
-        ></RNCamera> : <Text style={styles.Text}>{server}</Text> }
-      <ScrollView>
-        {
-          location ? <View>
-            <Text style={styles.Text}>Lat: {location.lat}</Text>
-            <Text style={styles.Text}>Lon: {location.lon}</Text>
-          </View> : <Text style={styles.Text}>Waiting for location...</Text>
-        }
-        <Pressable
-          style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-          onPress={startLocation}
-          >
-          <Text>Refresh</Text>
-        </Pressable>
-      </ScrollView>
+        server == null ? <PageServerSelection setServer={setServer}/> : null
+      }
+      {
+        server != null ? <PageServerControl server={server} setServer={setServer}/> : null
+      }
     </SafeAreaView>
   );
 }
