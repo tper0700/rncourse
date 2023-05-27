@@ -69,6 +69,7 @@
 **/init.png
 private_key
 **/server.crt
+**/server.cer
 **/server.key
 **/CA.pem
 **/CA.cer
