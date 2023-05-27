@@ -60,6 +60,18 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 8,
   },
+  ButtonMovie: {
+    height: 115,
+    justifyContent: "center",
+    alignContent: "center",
+    borderRadius: 8,
+    padding: 10,
+    margin: 8,
+    flexWrap: 'wrap',
+    flexShrink: 1,
+    flexDirection: 'row',
+    width: 125,
+  },
   ButtonUp: {
     backgroundColor: "orange",
   },

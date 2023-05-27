@@ -26,6 +26,7 @@ import { styles, headingBG } from './Styles';
 import Scanner from './components/Scanner';
 import NearbyServers from './components/NearbyServers';
 import Playlist from './components/ServerPlaylist';
+import PlaybackControls from './components/PlaybackControls';
 import { Server, coord } from '../Types';
 
 
@@ -48,6 +49,7 @@ function PageServerControl(props: {
   server: Server,
   setServer: Function,
 }): JSX.Element {
+  const [movie, setMovie] = useState<Movie|null>(null)
   return <View style={styles.Main}>
     <View style={[styles.Heading, {flexDirection: "row"}]}>
       <Pressable
@@ -61,7 +63,8 @@ function PageServerControl(props: {
         <Text style={styles.SubTitle}>{props.server.url}</Text>
       </View>
     </View>
-    <Playlist server={props.server}/>
+    <Playlist server={props.server} onSelected={setMovie}/>
+    <PlaybackControls server={props.server} movie={movie}/>
   </View>
 }
 

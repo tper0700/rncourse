@@ -23,10 +23,25 @@ import {
 import { styles, headingBG } from '../Styles';
 import { Server, Movie, coord } from '../Types';
 
+function MovieEntry(props: {
+  movie: Movie,
+  playfn: Function
+}): JSX.Element {
+  return <View>
+    <Pressable
+        style={({pressed}) => [ styles.ButtonMovie, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+        onPress={() => props.playfn(props.movie)}
+        >
+        <Text style={styles.ButtonLabel}>{props.movie.name}</Text>
+    </Pressable>
+  </View>
+}
+
 ////////////
 // Playlist component
 function Playlist(props: {
     server: Server,
+    onSelected: Function,
   }): JSX.Element {
     if (!props.server) {
         return <View style={{
@@ -37,28 +52,47 @@ function Playlist(props: {
         </View>
     }
 
-    const [playlist, setPlaylist] = useState<Movie[]>([])
+    const [playList, setPlaylist] = useState<Movie[]>([])
 
+    async function playMovie(movie: Movie) {
+      let url = props.server.url + "/play/" + String(movie.id);
+      console.log("play: [" + movie.name + "]");
+      fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        console.log("Playing: " + json);
+        props.onSelected(movie);
+      }).catch(error => {
+          console.log(error);
+      })
+   }
+    
     async function getPlaylist() {
         let url = props.server.url + "/movies";
         console.log("get movies server: [" + url + "]");
         fetch(url)
         .then(response => response.json())
         .then(json => {
-            console.log(json);
+          setPlaylist(json);
+          console.log(json);
         }).catch(error => {
             console.log(error);
         })
     }
 
-    useEffect(() => {getPlaylist();})
+    useEffect(() => {getPlaylist();}, [])
 
     return (
       <View style={{
-          flex: 1,
-          width: '100%',
           }}>
-        <Text style={styles.Text}>Videos available:</Text>        
+      {
+        playList.length ? <FlatList
+          horizontal={true}
+          data={playList}
+          renderItem={({item}) => <MovieEntry movie={item} playfn={playMovie}/>}
+          keyExtractor={item => String(item.id)}
+        /> : <Text style={styles.Text}>No movies available to play.</Text>
+      }
       </View>
     );
 }

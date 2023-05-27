@@ -16,6 +16,13 @@ app.get("/pause", (req, res) => {
   res.status(200);
   res.end();
 })
+
+app.get("/stop", (req, res) => {
+  Player.stop();
+  res.status(200);
+  res.end();
+})
+
 app.get("/play/:id", (req, res) => {
   let id = req.params.id;
   let movie = MOVIES.reduce((res, cur) => {
@@ -30,7 +37,7 @@ app.get("/play/:id", (req, res) => {
     res.end();
   }
 })
-
+/*
 var key = fs.readFileSync("server.key", "utf8");
 var cert = fs.readFileSync("server.crt", "utf8");
 var ca = fs.readFileSync("CA.pem", "utf8");
@@ -44,4 +51,9 @@ var creds = {
 var server = https.createServer(creds, app);
 server.listen(8920, () => {
   console.log("Server running on https://localhost:8920");
+});
+*/
+
+app.listen(8920, () => {
+  console.log("Server running on http://localhost:8920")
 });

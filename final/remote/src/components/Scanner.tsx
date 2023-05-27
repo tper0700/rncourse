@@ -43,10 +43,6 @@ function Scanner(props: {
       console.log(data);
       props.setServer(data);
     }
-    // TODO: actually come up with a schema for server names
-    if (info.indexOf("http://Titania.local") == 0) {
-    props.setServer("Connected to Titania");
-    }
   }
 
   return (

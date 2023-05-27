@@ -37,12 +37,9 @@ export const Player = new class {
     this.init();
   }
 
-  async init() {
-    await this.mpv.start();
-
-    //let server = "https://" + os.hostname() + ":8920/play/" + MOVIES[4].id;
+  async showQRCode() {
     let info = "MEDIASERVER " + JSON.stringify({
-      url: "https://" + os.hostname() + ":8920",
+      url: "http://" + os.hostname() + ":8920",
       name: os.hostname().split(".")[0]
     });
 
@@ -59,15 +56,22 @@ export const Player = new class {
     this.mpv.fullscreen();
     this.mpv.load("./init.png");
   }
+
+  async init() {
+    await this.mpv.start();
+    await this.showQRCode();
+  }
   
-  // TODO: Use MPV IPC
-  // https://mpv.io/manual/master/#json-ipc
   async pause() {
     if (await this.mpv.isPaused()) {
       this.mpv.play();
     } else {
       this.mpv.pause();
     }
+  }
+
+  async stop() {
+    await this.showQRCode();
   }
 
   async play(movie) {
