@@ -21,7 +21,7 @@ import {
 
 // UI Styles
 import { styles, headingBG } from '../Styles';
-import { Server, GetServerList, coord } from '../Types';
+import { Server, GetServerList, coord, isServerClose,  } from '../Types';
 
 import Geolocation from '@react-native-community/geolocation';
 
@@ -47,29 +47,28 @@ function NearbyServers(props: {
   }): JSX.Element {
     const [nearbyServers, setNearbyServers] = useState<Server[]>([]);
 
-    function isNearby(s: Server, c: coord) {
-      let latdist = Math.abs(s.lat - c.lat);
-      let londist = Math.abs(s.lon - c.lon);
-      console.log(" => " + s.name + " : " + latdist + ", " + londist);
-      return (latdist < 0.0005 && londist < 0.0005);
+    /*
+    updateServersByLocation: Filters servers list by coordinate c
+    */
+    async function updateServersByLocation(c: coord) {
+      const allServers = await GetServerList();
+      let nearby = allServers.filter((s) => isServerClose(s, c));
+
+      setNearbyServers(nearby);
+      console.log(c);
     }
 
     /*
-    getCurrentLocation(): Call GeoLocation to get curent location 
+    checkLocationAndServers(): Use Geolocation to pick nearby server list. 
      */
-    function startLocation() {
+    async function checkLocationAndServers() {
       Geolocation.getCurrentPosition((position) => {
         let c : coord = {
           "lat": Math.round(position.coords.latitude * 100000) / 100000,
           "lon": Math.round(position.coords.longitude * 100000) / 100000,
         }
         props.setLocation(c);
-
-        const allServers = GetServerList();
-        let nearby = allServers.filter((s) => isNearby(s, c));
-
-        setNearbyServers(nearby);
-        console.log(c);
+        updateServersByLocation(c);
       }, undefined, {
         maximumAge: 0,
         enableHighAccuracy: true
@@ -78,7 +77,7 @@ function NearbyServers(props: {
 
 
     // On startup, start watching the location
-    useEffect(() => { startLocation(); }, []);
+    useEffect(() => { checkLocationAndServers(); }, []);
 
     return (
       <View style={{

@@ -27,7 +27,7 @@ import Scanner from './components/Scanner';
 import NearbyServers from './components/NearbyServers';
 import Playlist from './components/ServerPlaylist';
 import PlaybackControls from './components/PlaybackControls';
-import { Server, coord } from '../Types';
+import { Server, coord, AddServerToList } from './Types';
 
 
 function PageServerSelection(props: {
@@ -71,7 +71,15 @@ function PageServerControl(props: {
 ////////////
 // Main application
 function App(): JSX.Element {
-  const [server, setServer] = useState<Server>(null);
+  const [server, setServer] = useState<Server | null>(null);
+
+  function SelectServer(s: Server | null) {
+    setServer(s);
+    if (s) {
+      AddServerToList(s);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.Main}>
       <StatusBar
@@ -79,10 +87,10 @@ function App(): JSX.Element {
         backgroundColor={headingBG}
       />
       {
-        server == null ? <PageServerSelection setServer={setServer}/> : null
+        server == null ? <PageServerSelection setServer={SelectServer}/> : null
       }
       {
-        server != null ? <PageServerControl server={server} setServer={setServer}/> : null
+        server != null ? <PageServerControl server={server} setServer={SelectServer}/> : null
       }
     </SafeAreaView>
   );
