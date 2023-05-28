@@ -27,7 +27,7 @@ import Scanner from './components/Scanner';
 import NearbyServers from './components/NearbyServers';
 import Playlist from './components/ServerPlaylist';
 import PlaybackControls from './components/PlaybackControls';
-import { Server, coord, AddServerToList } from './Types';
+import { Server, coord, AddServerToList, RemoveServerFromList } from './Types';
 
 
 function PageServerSelection(props: {
@@ -48,21 +48,47 @@ function PageServerSelection(props: {
 function PageServerControl(props: {
   server: Server,
   setServer: Function,
+  forgetServer: Function,
 }): JSX.Element {
-  const [movie, setMovie] = useState<Movie|null>(null)
+  const [movie, setMovie] = useState<Movie|null>(null);
+  const [options, setOptions] = useState<boolean>(false);
+
+  function forgetServer() {
+    console.log("forget " + props.server.name)
+    props.forgetServer(props.server);
+    props.setServer(null);
+  }
+
   return <View style={styles.Main}>
     <View style={[styles.Heading, {flexDirection: "row"}]}>
       <Pressable
           style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-          onPress={() => props.setServer(null)}
+          onPress={() => setOptions(!options)}
           >
-          <Text style={styles.ButtonLabel}>Back</Text>
+          <Text style={styles.ButtonLabel}>...</Text>
       </Pressable>
       <View style={{flex: 1}}>
         <Text style={styles.TitleText}>{props.server.name}</Text>
         <Text style={styles.SubTitle}>{props.server.url}</Text>
       </View>
     </View>
+    {
+      options ? <View style={[styles.Heading, {flexDirection: "row"}]}>
+        <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => props.setServer(null)}
+            >
+            <Text style={styles.ButtonLabel}>Select Another</Text>
+        </Pressable>
+        <Pressable
+            style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+            onPress={() => forgetServer()}
+            >
+            <Text style={styles.ButtonLabel}>Forget Server</Text>
+        </Pressable>
+      </View> : null
+    }
+    
     <Playlist server={props.server} onSelected={setMovie}/>
     <PlaybackControls server={props.server} movie={movie}/>
   </View>
@@ -79,6 +105,10 @@ function App(): JSX.Element {
       AddServerToList(s);
     }
   }
+  
+  function ForgetServer(server: Server) {
+    RemoveServerFromList(server);
+  }
 
   return (
     <SafeAreaView style={styles.Main}>
@@ -90,7 +120,7 @@ function App(): JSX.Element {
         server == null ? <PageServerSelection setServer={SelectServer}/> : null
       }
       {
-        server != null ? <PageServerControl server={server} setServer={SelectServer}/> : null
+        server != null ? <PageServerControl server={server} setServer={SelectServer} forgetServer={ForgetServer}/> : null
       }
     </SafeAreaView>
   );
