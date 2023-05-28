@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export type Server = {
   url: string,
   name: string,
@@ -40,12 +42,22 @@ export var HARDCODED_SERVERS : Server[] = [
 // TODO: Store in AsyncStorage
 // TODO: Save new servers
 export async function GetServerList() : Server[] {
-    return HARDCODED_SERVERS
+  const jsonList = await AsyncStorage.getItem('@remoteMovieList');
+  let movies = jsonList != null ? JSON.parse(jsonList) : [];
+  return movies;
 }
 
-export function SaveServer(server: Server) {
-  console.log("TODO: Save server here");
-  HARDCODED_SERVERS.push(server);
+export async function SaveServer(server: Server) {
+  // Get movies from AsyncStorage
+  const jsonList = await AsyncStorage.getItem('@remoteMovieList');
+  let movies = jsonList != null ? JSON.parse(jsonList) : [];
+
+  // Append movie
+  movies.push(server);
+
+  // Save updated list
+  let jsonUpdated = JSON.stringify(movies);
+  await AsyncStorage.setItem('@remoteMovieList', jsonUpdated);
 }
 
 export function isServerClose(s: Server, c: coord) {
