@@ -60,7 +60,6 @@ function Playlist(props: {
       fetch(url)
       .then(response => response.json())
       .then(json => {
-        console.log("Playing: " + json);
         props.onSelected(movie);
       }).catch(error => {
           console.log(error);

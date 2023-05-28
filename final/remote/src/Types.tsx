@@ -43,20 +43,20 @@ export var HARDCODED_SERVERS : Server[] = [
 // TODO: Save new servers
 export async function GetServerList() : Server[] {
   const jsonList = await AsyncStorage.getItem('@remoteMovieList');
-  let movies = jsonList != null ? JSON.parse(jsonList) : [];
-  return movies;
+  let servers = jsonList != null ? JSON.parse(jsonList) : [];
+  return servers;
 }
 
 export async function SaveServer(server: Server) {
   // Get movies from AsyncStorage
   const jsonList = await AsyncStorage.getItem('@remoteMovieList');
-  let movies = jsonList != null ? JSON.parse(jsonList) : [];
+  let servers = jsonList != null ? JSON.parse(jsonList) : [];
 
   // Append movie
-  movies.push(server);
+  servers.push(server);
 
   // Save updated list
-  let jsonUpdated = JSON.stringify(movies);
+  let jsonUpdated = JSON.stringify(servers);
   await AsyncStorage.setItem('@remoteMovieList', jsonUpdated);
 }
 
@@ -85,5 +85,26 @@ export async function AddServerToList(server: Server) {
   }
   if (!seen) {
     SaveServer(server);
+  }
+}
+
+export async function RemoveServerFromList(server: Server) {
+  console.log("Removing server " + server.url)
+  let servers: Server[] = await GetServerList();
+  let seen: boolean = false
+  let c: coord = {
+    lat: server.lat,
+    lon: server.lon,
+  }
+  for (let i in servers) {
+    let s = servers[i];
+    console.log(" : " + s.url)
+    if (s.url == server.url && isServerClose(s, c)) {
+      console.log ("delete this one");
+      servers.splice(i, 1);
+
+      let jsonUpdated = JSON.stringify(servers);
+      await AsyncStorage.setItem('@remoteMovieList', jsonUpdated);
+    }
   }
 }
