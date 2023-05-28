@@ -68,14 +68,24 @@ function Playlist(props: {
     
     async function getPlaylist() {
         let url = props.server.url + "/movies";
-        console.log("get movies server: [" + url + "]");
         fetch(url)
         .then(response => response.json())
         .then(json => {
           setPlaylist(json);
-          console.log(json);
+          console.log(JSON.stringify(json));
         }).catch(error => {
             console.log(error);
+        })
+
+        url = props.server.url + "/state";
+        fetch(url)
+        .then(response => response.json())
+        .then(json => {
+          if (json.current) {
+            props.onSelected(json.current);
+          }
+        }).catch(error => {
+          console.log(error)
         })
     }
 

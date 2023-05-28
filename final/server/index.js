@@ -4,11 +4,18 @@ import * as https from "https";
 import {MOVIES, Player} from './movies.js'
 
 const app = express()
+var currentMovie = null;
 
 app.set("view engine", "ejs");
 
 app.get("/movies", (req, res) => {
   res.json(MOVIES);
+})
+
+app.get("/state", (req, res) => {
+  res.json({
+    current: currentMovie
+  });
 })
 
 app.get("/pause", (req, res) => {
@@ -19,6 +26,7 @@ app.get("/pause", (req, res) => {
 
 app.get("/stop", (req, res) => {
   Player.stop();
+  currentMovie = null;
   res.status(200);
   res.end();
 })
@@ -30,7 +38,11 @@ app.get("/play/:id", (req, res) => {
   }, null);
 
   if (movie) {
-    Player.play(movie);
+    currentMovie = movie;
+    Player.play(movie)
+    .catch(err => {
+      console.log("playback error: " + JSON.stringify(err));
+    });
     res.json(movie);
   } else {
     res.status(404);

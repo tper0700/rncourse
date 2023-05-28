@@ -9,9 +9,9 @@ export const MOVIES = [
     id: 15965,
   },
   {
-    name: "Bouncing Light",
-    uri: "https://www.youtube.com/watch?v=VTH1zCgC1kI",
-    id: 15425,
+    name: "River sounds",
+    uri: "https://www.youtube.com/watch?v=g-Tu2-B4-0o",
+    id: 12215,
   },
   {
     name: "Blue Spotted Grid",
@@ -52,9 +52,9 @@ export const Player = new class {
       }
     });
 
-    this.mpv.loop("inf");
-    this.mpv.fullscreen();
-    this.mpv.load("./init.png");
+    await this.mpv.loop("inf");
+    await this.mpv.fullscreen();
+    await this.mpv.load("./init.png");
   }
 
   async init() {
@@ -64,9 +64,9 @@ export const Player = new class {
   
   async pause() {
     if (await this.mpv.isPaused()) {
-      this.mpv.play();
+      await this.mpv.play();
     } else {
-      this.mpv.pause();
+      await this.mpv.pause();
     }
   }
 
@@ -76,7 +76,16 @@ export const Player = new class {
 
   async play(movie) {
     console.log("Play: " + movie.name);
-    await this.mpv.load(movie.uri);
+    try {
+      await this.mpv.load(movie.uri);
+    } catch (err) {
+      console.log("unable to play movie");
+      await this.mpv.quit();
+      this.mpv = null;
+      this.mpv = new mpvAPI();
+      await this.init();
+      console.log("restarted");
+    }
   } 
 }
 

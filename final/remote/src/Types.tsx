@@ -39,8 +39,6 @@ export var HARDCODED_SERVERS : Server[] = [
   }
 ]
 
-// TODO: Store in AsyncStorage
-// TODO: Save new servers
 export async function GetServerList() : Server[] {
   const jsonList = await AsyncStorage.getItem('@remoteMovieList');
   let servers = jsonList != null ? JSON.parse(jsonList) : [];
