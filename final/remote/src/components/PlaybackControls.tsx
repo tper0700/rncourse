@@ -61,21 +61,23 @@ function PlaybackControls(props: {
     }
     
     return (
-      <View style={{
-          }}>
-        <Text style={styles.Text}>Playing: {props.movie.name}</Text>
+      <View style={styles.PlaybackSection}>
+        <Text style={styles.Text}>Now playing:</Text>
+        <Text style={[styles.Text, {fontSize: 25, fontWeight: 'bold'}]}>{props.movie.name}</Text>
+        <View style={styles.PlaybackButtons}>
         <Pressable
-          style={({pressed}) => [ styles.ButtonMovie, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+          style={({pressed}) => [ styles.ButtonPlayback, pressed ? styles.ButtonDown : styles.ButtonUp ]}
           onPress={() => pause()}
         >
           <Text style={styles.ButtonLabel}>Pause</Text>
         </Pressable>
         <Pressable
-          style={({pressed}) => [ styles.ButtonMovie, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+          style={({pressed}) => [ styles.ButtonPlayback, pressed ? styles.ButtonDown : styles.ButtonUp ]}
           onPress={() => stop()}
         >
           <Text style={styles.ButtonLabel}>Stop</Text>
         </Pressable>
+        </View>
       </View>
     );
 }

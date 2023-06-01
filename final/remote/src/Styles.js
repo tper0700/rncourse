@@ -4,7 +4,7 @@ const headingBG = "#262424";
 const headingfg = "#e5dada";
 const mainbg = "#323238";
 const mainfg = "#f5dfdf";
-const articlefg = "white";
+const controlbg = "#525257";
 
 const styles = StyleSheet.create({
   Main: {
@@ -52,6 +52,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: mainfg
   },
+  PlaybackSection: {
+    padding: 8,
+    margin: 15,
+    borderRadius: 8,
+    backgroundColor: controlbg,
+  },
+  PlaybackButtons: {
+    flexDirection: 'row',
+  },
+  MovieTitle: {
+    paddingBottom: 0,
+    paddingLeft:5,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: mainfg
+  },
   ButtonBasic: {
     height: 40,
     justifyContent: "center",
@@ -71,6 +87,18 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     flexDirection: 'row',
     width: 125,
+  },
+  ButtonPlayback: {
+    height: 80,
+    justifyContent: "center",
+    alignContent: "center",
+    borderRadius: 8,
+    padding: 10,
+    margin: 8,
+    flexWrap: 'wrap',
+    flexShrink: 1,
+    flexDirection: 'row',
+    width: 100,
   },
   ButtonUp: {
     backgroundColor: "orange",

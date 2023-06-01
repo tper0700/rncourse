@@ -92,15 +92,16 @@ function Playlist(props: {
     useEffect(() => {getPlaylist();}, [])
 
     return (
-      <View style={{
-          }}>
+      <View style={styles.PlaybackSection}>
       {
-        playList.length ? <FlatList
+        playList.length ? <View>
+          <Text style={styles.Text}>Movies Available:</Text>
+          <FlatList
           horizontal={true}
           data={playList}
           renderItem={({item}) => <MovieEntry movie={item} playfn={playMovie}/>}
           keyExtractor={item => String(item.id)}
-        /> : <Text style={styles.Text}>No movies available to play.</Text>
+        /></View> : <Text style={styles.Text}>No movies available to play.</Text>
       }
       </View>
     );
