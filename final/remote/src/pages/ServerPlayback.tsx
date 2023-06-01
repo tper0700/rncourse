@@ -42,14 +42,20 @@ function PageServerControl(props: {
     <View style={[styles.Heading, {flexDirection: "row"}]}>
       <Pressable
           style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
-          onPress={() => setOptions(!options)}
+          onPress={() => props.setServer(null)}
           >
-          <Text style={styles.ButtonLabel}>...</Text>
+          <Text style={styles.ButtonLabel}>&lt;</Text>
       </Pressable>
       <View style={{flex: 1}}>
         <Text style={styles.TitleText}>{props.server.name}</Text>
         <Text style={styles.SubTitle}>{props.server.url}</Text>
       </View>
+      <Pressable
+          style={({pressed}) => [ styles.ButtonBasic, pressed ? styles.ButtonDown : styles.ButtonUp ]}
+          onPress={() => setOptions(!options)}
+          >
+          <Text style={styles.ButtonLabel}>Options</Text>
+      </Pressable>
     </View>
     {
       options ? <ServerOptions setServer={props.setServer} forgetServer={forgetServer} /> : null

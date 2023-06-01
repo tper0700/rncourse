@@ -93,7 +93,7 @@ function PlaybackControls(props: {
       <View style={styles.PlaybackSection}>
         <Text style={styles.Text}>Now playing:</Text>
         <Text style={styles.MovieTitle}>{props.movie.name}</Text>
-        <Text style={styles.Text}>Volume: {volume}</Text>
+        <Text style={styles.Text}>Volume: </Text>
         <Slider
           value={volume}
           onSlidingComplete={setVolumeSlider}
