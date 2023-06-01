@@ -55,6 +55,7 @@ function Playlist(props: {
     const [playList, setPlaylist] = useState<Movie[]>([])
 
     async function playMovie(movie: Movie) {
+      props.onSelected(null);
       let url = props.server.url + "/play/" + String(movie.id);
       console.log("play: [" + movie.name + "]");
       fetch(url)

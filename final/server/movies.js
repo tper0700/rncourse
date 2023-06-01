@@ -74,6 +74,15 @@ export const Player = new class {
     await this.showQRCode();
   }
 
+  async getVolume() {
+    return await this.mpv.getProperty("volume");
+  }
+
+  async setVolume(volume) {
+    await this.mpv.volume(volume);
+    return await this.mpv.getProperty("volume");
+  }
+
   async play(movie) {
     console.log("Play: " + movie.name);
     try {

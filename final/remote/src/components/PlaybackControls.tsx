@@ -6,18 +6,11 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  RefreshControl,
-  SafeAreaView,
-  StatusBar,
   Text,
   View,
-  FlatList,
-  Image,
-  TextInput,
-  Linking,
   Pressable,
-  ScrollView,
 } from 'react-native';
+import {Slider} from '@miblanchard/react-native-slider';
 
 // UI Styles
 import { styles, headingBG } from '../Styles';
@@ -28,6 +21,7 @@ import { Server, Movie, coord } from '../Types';
 function PlaybackControls(props: {
     server: Server,
     movie: Movie,
+    onStop: Function,
   }): JSX.Element {
     if (!props.movie || !props.server) {
         return <View style={{
@@ -36,6 +30,38 @@ function PlaybackControls(props: {
             }}>
           <Text style={styles.Text}>No movie playing.</Text>        
         </View>
+    }
+
+    let [volume, setVolume] = useState<number>(0);
+
+    async function getVolume() {
+      let url = props.server.url + "/volume";
+      fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        setVolume(json.volume);
+      }).catch(error => {
+          console.log(error);
+      })
+    }
+
+    function setVolumeSlider(vol) {
+      let tgt = Math.round(vol);
+      let url = props.server.url + "/volume";
+      fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({volume: tgt}),
+      })
+      .then(response => response.json())
+      .then(json => {
+        console.log(JSON.stringify(json));
+        setVolume(json.volume);
+      }).catch(error => {
+          console.log(error);
+      })
     }
 
     async function pause() {
@@ -55,15 +81,25 @@ function PlaybackControls(props: {
       fetch(url)
       .then(response => {
         console.log("Stopped");
+        props.onStop();
       }).catch(error => {
           console.log(error);
       })
     }
     
+    useEffect(() => {getVolume()}, []);
+    
     return (
       <View style={styles.PlaybackSection}>
         <Text style={styles.Text}>Now playing:</Text>
-        <Text style={[styles.Text, {fontSize: 25, fontWeight: 'bold'}]}>{props.movie.name}</Text>
+        <Text style={styles.MovieTitle}>{props.movie.name}</Text>
+        <Text style={styles.Text}>Volume: {volume}</Text>
+        <Slider
+          value={volume}
+          onSlidingComplete={setVolumeSlider}
+          minimumValue={0}
+          maximumValue={100}
+        />
         <View style={styles.PlaybackButtons}>
         <Pressable
           style={({pressed}) => [ styles.ButtonPlayback, pressed ? styles.ButtonDown : styles.ButtonUp ]}

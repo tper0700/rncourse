@@ -18,7 +18,7 @@ import { styles, headingBG } from '../Styles';
 import Playlist from '../components/ServerPlaylist';
 import PlaybackControls from '../components/PlaybackControls';
 import ServerOptions from '../components/ServerOptions';
-import { Server, coord, AddServerToList, RemoveServerFromList } from './Types';
+import { Server, Movie } from '../Types';
 
 function PageServerControl(props: {
   server: Server,
@@ -32,6 +32,10 @@ function PageServerControl(props: {
     console.log("forget " + props.server.name)
     props.forgetServer(props.server);
     props.setServer(null);
+  }
+  
+  function stop() {
+    setMovie(null);
   }
 
   return <View style={styles.Main}>
@@ -52,7 +56,7 @@ function PageServerControl(props: {
     }
     
     <Playlist server={props.server} onSelected={setMovie}/>
-    <PlaybackControls server={props.server} movie={movie}/>
+    <PlaybackControls server={props.server} movie={movie} onStop={stop}/>
   </View>
 }
 

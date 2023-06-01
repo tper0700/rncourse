@@ -15,7 +15,7 @@ import {
 // UI Styles
 import { styles, headingBG } from '../Styles';
 
-import { Server } from './Types';
+import { Server } from '../Types';
 
 function ServerOptions(props: {
   setServer: Function,
