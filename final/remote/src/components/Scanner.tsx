@@ -46,20 +46,20 @@ function Scanner(props: {
   }
 
   return (
-    <View style={{
+    <View style={[styles.PlaybackSection, {
       flex: 1,
-      width: '100%',
-      }}>
-    <RNCamera
-      style={{
-      flex: 1,
-      width: '100%',
-      }}
-      captureAudio={false}
-      type={RNCamera.Constants.Type.back}
-      flashMode={RNCamera.Constants.FlashMode.off}
-      onBarCodeRead={onScan}
-    ></RNCamera>
+    }]}>
+      <Text style={styles.Text}>QR Code Scanner</Text>
+      <RNCamera
+        style={{
+        flex: 1,
+        width: '100%',
+        }}
+        captureAudio={false}
+        type={RNCamera.Constants.Type.back}
+        flashMode={RNCamera.Constants.FlashMode.off}
+        onBarCodeRead={onScan}
+      ></RNCamera>
     </View>
   );
 }

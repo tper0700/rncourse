@@ -80,16 +80,15 @@ function NearbyServers(props: {
     useEffect(() => { checkLocationAndServers(); }, []);
 
     return (
-      <View style={{
+      <View style={[styles.PlaybackSection, {
           flex: 1,
-          width: '100%',
-          }}>
+          }]}>
         <Text style={styles.Text}>Nearby Servers:</Text>
         {
           nearbyServers.length ? <FlatList
           data={nearbyServers}
           renderItem={({item}) => <ServerEntry server={item} setServer={props.setServer}/>}
-        /> : <Text style={styles.Text}>Scan a media center QR code.</Text>
+        /> : <Text style={styles.Text}>No known servers nearby</Text>
         }
         
       </View>
