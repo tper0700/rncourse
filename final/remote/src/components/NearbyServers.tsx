@@ -39,9 +39,47 @@ function ServerEntry(props: {
   </View>
 }
 
+function BaseServerList(props: {
+  serverList: Server[],
+  setServer: Function,
+  title: string,
+}): JSX.Element {
+  return (
+    <View style={[styles.PlaybackSection, {
+        flex: 1,
+        }]}>
+      <Text style={styles.Text}>{props.title}</Text>
+      {
+        props.serverList.length ? <FlatList
+        data={props.serverList}
+        renderItem={({item}) => <ServerEntry server={item} setServer={props.setServer}/>}
+      /> : <Text style={styles.Text}>No known servers available</Text>
+      }
+      
+    </View>
+  );
+}
+
+export function AllServers(props: {
+  setServer: Function
+}): JSX.Element {
+  const [servers, setServers] = useState<Server[]>([]);
+
+  async function getAllServers() {
+    setServers(await GetServerList());
+  }
+
+  // On startup, set the server list
+  useEffect(() => { getAllServers(); }, []);
+
+  return (
+    <BaseServerList title={"All Servers:"} serverList={servers} setServer={props.setServer}/>
+  ); 
+}
+
 ////////////
 // Server selector
-function NearbyServers(props: {
+export function NearbyServers(props: {
     setServer: Function,
     setLocation: Function
   }): JSX.Element {
@@ -75,24 +113,10 @@ function NearbyServers(props: {
       });
     }
 
-
     // On startup, start watching the location
     useEffect(() => { checkLocationAndServers(); }, []);
 
     return (
-      <View style={[styles.PlaybackSection, {
-          flex: 1,
-          }]}>
-        <Text style={styles.Text}>Nearby Servers:</Text>
-        {
-          nearbyServers.length ? <FlatList
-          data={nearbyServers}
-          renderItem={({item}) => <ServerEntry server={item} setServer={props.setServer}/>}
-        /> : <Text style={styles.Text}>No known servers nearby</Text>
-        }
-        
-      </View>
+      <BaseServerList title={"Nearby Servers:"} serverList={nearbyServers} setServer={props.setServer}/>
     );
 }
-
-export default NearbyServers;

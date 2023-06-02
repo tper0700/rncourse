@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const SERVER_CLOSE_FACTOR = 0.000075
+
 export type Server = {
   url: string,
   name: string,
@@ -63,7 +65,7 @@ export function isServerClose(s: Server, c: coord) {
   let londist = s.lon - c.lon;
   let dist = Math.sqrt(latdist * latdist + londist * londist);
   console.log(" --- " + s.name + " : " + dist);
-  return dist < 0.0005;
+  return dist < SERVER_CLOSE_FACTOR;
 }
 
 export async function AddServerToList(server: Server) {

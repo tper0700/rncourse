@@ -61,6 +61,9 @@ const styles = StyleSheet.create({
   PlaybackButtons: {
     flexDirection: 'row',
   },
+  TabButtons: {
+    flexDirection: 'row',
+  },
   MovieTitle: {
     paddingBottom: 0,
     paddingLeft:5,
