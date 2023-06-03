@@ -16,7 +16,7 @@ import { styles, headingBG } from '../Styles';
 
 import Scanner from '../components/Scanner';
 import { NearbyServers, AllServers } from '../components/NearbyServers';
-import { Server, coord, AddServerToList, RemoveServerFromList } from './Types';
+import { Server, coord, AddServerToList, RemoveServerFromList } from '../Types';
 
 //////////////
 // Keeps track of current location and tab selection state.
