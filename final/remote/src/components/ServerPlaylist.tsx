@@ -23,6 +23,7 @@ import {
 import { styles, headingBG } from '../Styles';
 import { Server, Movie, coord } from '../Types';
 
+// Renders a single movie in the playlist control.
 function MovieEntry(props: {
   movie: Movie,
   playfn: Function
@@ -54,6 +55,7 @@ function Playlist(props: {
 
     const [playList, setPlaylist] = useState<Movie[]>([])
 
+    // Button handler for playlist movie button.
     async function playMovie(movie: Movie) {
       props.onSelected(null);
       let url = props.server.url + "/play/" + String(movie.id);
@@ -61,23 +63,28 @@ function Playlist(props: {
       fetch(url)
       .then(response => response.json())
       .then(json => {
+        // "Select the movie when the server says it has started."
         props.onSelected(movie);
       }).catch(error => {
           console.log(error);
       })
    }
     
+   // Initialize playlist.
+   // This is the first code that runs when a server is chosen.
     async function getPlaylist() {
         let url = props.server.url + "/movies";
         fetch(url)
         .then(response => response.json())
         .then(json => {
+          // Update the playlist
           setPlaylist(json);
           console.log(JSON.stringify(json));
         }).catch(error => {
             console.log(error);
         })
 
+        // Check server state. If already playing a movie, "select" it
         url = props.server.url + "/state";
         fetch(url)
         .then(response => response.json())

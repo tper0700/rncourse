@@ -17,12 +17,13 @@ import { styles, headingBG } from '../Styles';
 import { Server, Movie, coord } from '../Types';
 
 ////////////
-// Playlist component
+// Playlist component: volume, pause and stop buttons.
 function PlaybackControls(props: {
     server: Server,
     movie: Movie,
     onStop: Function,
   }): JSX.Element {
+    // If this control loads before a movie is playing, show an error.
     if (!props.movie || !props.server) {
         return <View style={{
             flex: 1,
@@ -58,6 +59,8 @@ function PlaybackControls(props: {
       .then(response => response.json())
       .then(json => {
         console.log(JSON.stringify(json));
+        // Update the slider bar to whatever volume the server is at,
+        // not what we requested.
         setVolume(json.volume);
       }).catch(error => {
           console.log(error);
@@ -89,6 +92,7 @@ function PlaybackControls(props: {
     
     useEffect(() => {getVolume()}, []);
     
+    // This is the block of UI under the playlist.
     return (
       <View style={styles.PlaybackSection}>
         <Text style={styles.Text}>Now playing:</Text>

@@ -1,6 +1,5 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Media control page: shows the movie list and playback controls
  *
  * @format
  */
@@ -20,6 +19,8 @@ import PlaybackControls from '../components/PlaybackControls';
 import ServerOptions from '../components/ServerOptions';
 import { Server, Movie } from '../Types';
 
+///////////
+// Main UI for server interactions. Shows a playlist and media controls for server.
 function PageServerControl(props: {
   server: Server,
   setServer: Function,
@@ -28,16 +29,20 @@ function PageServerControl(props: {
   const [movie, setMovie] = useState<Movie|null>(null);
   const [options, setOptions] = useState<boolean>(false);
 
+  // Let parent know server was removed.
   function forgetServer() {
     console.log("forget " + props.server.name)
     props.forgetServer(props.server);
     props.setServer(null);
   }
   
+  // Handler to track when the user stops the movie.
   function stop() {
     setMovie(null);
   }
 
+  // Most of the code below renders the header bar, back button and options menu.
+  // The Playlist and PlaybackControls render the content of the page.
   return <View style={styles.Main}>
     <View style={[styles.Heading, {flexDirection: "row"}]}>
       <Pressable

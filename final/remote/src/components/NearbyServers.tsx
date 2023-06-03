@@ -1,5 +1,5 @@
 /**
- * QR Code UI Component
+ * Known server selector
  *
  * @format
  */
@@ -25,6 +25,7 @@ import { Server, GetServerList, coord, isServerClose,  } from '../Types';
 
 import Geolocation from '@react-native-community/geolocation';
 
+// Button for a single server in the list of servers.
 function ServerEntry(props: {
   server: Server,
   setServer: Function,
@@ -39,6 +40,8 @@ function ServerEntry(props: {
   </View>
 }
 
+// Base list component, Given a list of servers,
+// renders a flatlist of  buttons for each server
 function BaseServerList(props: {
   serverList: Server[],
   setServer: Function,
@@ -60,6 +63,7 @@ function BaseServerList(props: {
   );
 }
 
+// Renders a BaseServerList with all known servers (from storage.)
 export function AllServers(props: {
   setServer: Function
 }): JSX.Element {
@@ -78,7 +82,7 @@ export function AllServers(props: {
 }
 
 ////////////
-// Server selector
+// Shows a BaseServerList with only those servers that are nearby.
 export function NearbyServers(props: {
     setServer: Function,
     setLocation: Function

@@ -32,9 +32,12 @@ function Scanner(props: {
     location: coord,
   }): JSX.Element {
 
+  // Event handler for when RNCamera detects a QR Code
   function onScan(e : any) {
     let info : string = e.data;
     console.log("SCAN: " + info);
+    // Server uses a "MEDIASERVER {<severdata>}" string in the QR Code.
+    // This way we know we are looking at our QRCode.
     if (info.indexOf("MEDIASERVER {") == 0) {
       console.log("Got Data:===============")
       let data : Server = JSON.parse(info.slice(12));
@@ -45,6 +48,7 @@ function Scanner(props: {
     }
   }
 
+  // Let RNCamera capture video until it sees a barcode.
   return (
     <View style={[styles.PlaybackSection, {
       flex: 1,

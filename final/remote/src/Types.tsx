@@ -1,3 +1,7 @@
+/*
+ * Types and helper functions for server interaction
+ */
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SERVER_CLOSE_FACTOR = 0.000075
@@ -20,18 +24,19 @@ export type Movie = {
   "id": number,
 }
 
+// Test list of servers, used for testing only.
 export var HARDCODED_SERVERS : Server[] = [
   {
     url: "http://garbage1", 
     name: "garbage1",
-    lat: 47.56029,
-    lon: -122.28527,
+    lat: 52.56029,
+    lon: -125.28527,
   },
   {
     url: "http://garbage2",
     name: "garbage2",
-    lat: 47.56029,
-    lon: -122.28527,
+    lat: 52.56029,
+    lon: -125.28527,
   },
   {
     url: "garbg",
@@ -41,12 +46,14 @@ export var HARDCODED_SERVERS : Server[] = [
   }
 ]
 
+// Check Async Storage for current list of servers
 export async function GetServerList() : Server[] {
   const jsonList = await AsyncStorage.getItem('@remoteMovieList');
   let servers = jsonList != null ? JSON.parse(jsonList) : [];
   return servers;
 }
 
+// Add a server to Async storage
 export async function SaveServer(server: Server) {
   // Get movies from AsyncStorage
   const jsonList = await AsyncStorage.getItem('@remoteMovieList');
@@ -60,6 +67,8 @@ export async function SaveServer(server: Server) {
   await AsyncStorage.setItem('@remoteMovieList', jsonUpdated);
 }
 
+// Helper calculation to see how far a server is
+// Uses cartesian distance approximation.
 export function isServerClose(s: Server, c: coord) {
   let latdist = s.lat - c.lat;
   let londist = s.lon - c.lon;
@@ -68,6 +77,7 @@ export function isServerClose(s: Server, c: coord) {
   return dist < SERVER_CLOSE_FACTOR;
 }
 
+// Adds a server to list without duplication (checks GPS coords)
 export async function AddServerToList(server: Server) {
   console.log("Adding server " + server.url)
   let servers: Server[] = await GetServerList();
@@ -88,6 +98,7 @@ export async function AddServerToList(server: Server) {
   }
 }
 
+// Removes a server from list (looks for same URL and nearby location)
 export async function RemoveServerFromList(server: Server) {
   console.log("Removing server " + server.url)
   let servers: Server[] = await GetServerList();

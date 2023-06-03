@@ -1,6 +1,5 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Server options control
  *
  * @format
  */
@@ -17,6 +16,7 @@ import { styles, headingBG } from '../Styles';
 
 import { Server } from '../Types';
 
+// Control section for managing server settings
 function ServerOptions(props: {
   setServer: Function,
   forgetServer: Function,

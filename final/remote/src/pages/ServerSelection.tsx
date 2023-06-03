@@ -1,6 +1,5 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Server selection page: Lets user scan QR codes or select a known server
  *
  * @format
  */
@@ -19,6 +18,11 @@ import Scanner from '../components/Scanner';
 import { NearbyServers, AllServers } from '../components/NearbyServers';
 import { Server, coord, AddServerToList, RemoveServerFromList } from './Types';
 
+//////////////
+// Keeps track of current location and tab selection state.
+// Depending on current tab, shows the right page UI.
+// At the bottom of the page, a hovering dock allows the user
+// to switch tabs.
 function PageServerSelection(props: {
   setServer: Function
 }): JSX.Element {
